@@ -7,7 +7,6 @@ import {
   FaUser,
   FaChevronDown,
   FaArrowLeft,
-  FaArrowRight,
   FaTimes,
 } from "react-icons/fa";
 
@@ -21,21 +20,21 @@ import img7 from "../assets/img7.jpeg";
 import img8 from "../assets/img8.jpeg";
 import img9 from "../assets/img9.jpeg";
 
-const MenuPage = ({ sidebarOpen, toggleSidebar }) => {
+const MenuPage = () => {
   const [activeCategory, setActiveCategory] = useState("pizza");
   const [selectedTable, setSelectedTable] = useState("Table 1");
   const [orderNumber, setOrderNumber] = useState("#22222");
   const [searchQuery, setSearchQuery] = useState("");
   const [showTableDropdown, setShowTableDropdown] = useState(false);
   const [cart, setCart] = useState([]);
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(
+  const [menuSidebarOpen, setMenuSidebarOpen] = useState(
     window.innerWidth >= 768
   );
   const location = useLocation();
 
   useEffect(() => {
     const handleResize = () => {
-      setRightSidebarOpen(window.innerWidth >= 1000);
+      setMenuSidebarOpen(window.innerWidth >= 1000);
     };
 
     window.addEventListener("resize", handleResize);
@@ -47,7 +46,7 @@ const MenuPage = ({ sidebarOpen, toggleSidebar }) => {
 
   useEffect(() => {
     if (window.innerWidth < 1000) {
-      setRightSidebarOpen(false);
+      setMenuSidebarOpen(false);
     }
   }, [location]);
 
@@ -60,7 +59,7 @@ const MenuPage = ({ sidebarOpen, toggleSidebar }) => {
   ];
 
   const toggleRightSidebar = () => {
-    setRightSidebarOpen(!rightSidebarOpen);
+    setMenuSidebarOpen(!menuSidebarOpen);
   };
 
   const [orderType, setOrderType] = useState("dine-in");
@@ -256,7 +255,7 @@ const MenuPage = ({ sidebarOpen, toggleSidebar }) => {
 
   return (
     <div className="h-full flex relative">
-      {rightSidebarOpen && (
+      {menuSidebarOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={toggleRightSidebar}
@@ -367,16 +366,16 @@ const MenuPage = ({ sidebarOpen, toggleSidebar }) => {
         onClick={toggleRightSidebar}
         className="fixed top-[26%] right-0 z-50 bg-white p-2 rounded-lg shadow-md text-[#1e62b3] lg:hidden"
       >
-        {rightSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
+        {menuSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
       </button>
 
       <div
         className={`
-          ${rightSidebarOpen ? "translate-x-0" : "translate-x-full"} 
+          ${menuSidebarOpen ? "translate-x-0" : "translate-x-full"} 
           lg:translate-x-0 
           fixed lg:relative lg:block 
           w-80 max-w-[80vw] lg:max-w-none 
-          bg-white border-l border-neutral-200 p-6 
+          bg-white border-l border-neutral-200 p-4 sm:p-6 
           right-0 h-full z-50
           transition-transform duration-300 ease-in-out
         `}
@@ -414,9 +413,9 @@ const MenuPage = ({ sidebarOpen, toggleSidebar }) => {
           <p className="text-sm text-neutral-500">{orderNumber}</p>
         </div>
 
-        <div className="space-x-2 flex justify-center items-center gap-3 mt-4 mb-6">
+        <div className="flex justify-center items-center gap-3 mt-4 mb-6">
           <button
-            className={`px-4 py-1 text-sm ${
+            className={`px-2 sm:px-4 py-1 text-sm ${
               orderType === "dine-in"
                 ? "bg-danger-600 text-white"
                 : "border border-primary-600 text-primary-600"
@@ -426,7 +425,7 @@ const MenuPage = ({ sidebarOpen, toggleSidebar }) => {
             Dine in
           </button>
           <button
-            className={`px-4 py-1 text-sm ${
+            className={`px-2 sm:px-4 py-1 text-sm ${
               orderType === "takeaway"
                 ? "bg-danger-600 text-white"
                 : "border border-primary-600 text-primary-600"

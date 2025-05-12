@@ -27,12 +27,12 @@ const reservationsData = [
   { id: 6, table: "T6", name: "Ali Adel", people: 4, time: "3:30pm" },
 ];
 
-const TablePage = ({ sidebarOpen, toggleSidebar }) => {
+const TablePage = () => {
   const [seatingType, setSeatingType] = useState("indoor");
   // selectedTable will be used for future functionality to handle table operations
   const [selectedTable, setSelectedTable] = useState(null); // eslint-disable-line no-unused-vars
   // Set rightSidebarOpen to false by default on small screens and true on large screens and up
-  const [rightSidebarOpen, setRightSidebarOpen] = useState(
+  const [tableSidebarOpen, setTableSidebarOpen] = useState(
     window.innerWidth >= 1024
   );
   const location = useLocation();
@@ -41,7 +41,7 @@ const TablePage = ({ sidebarOpen, toggleSidebar }) => {
   useEffect(() => {
     const handleResize = () => {
       // On large screens and up (lg breakpoint is typically 1024px), auto-open the sidebar
-      setRightSidebarOpen(window.innerWidth >= 1024);
+      setTableSidebarOpen(window.innerWidth >= 1024);
     };
 
     // Add event listener for window resize
@@ -57,7 +57,7 @@ const TablePage = ({ sidebarOpen, toggleSidebar }) => {
   // Close sidebar when location changes (page navigation)
   useEffect(() => {
     if (window.innerWidth < 1024) {
-      setRightSidebarOpen(false);
+      setTableSidebarOpen(false);
     }
   }, [location]);
 
@@ -66,13 +66,13 @@ const TablePage = ({ sidebarOpen, toggleSidebar }) => {
   };
 
   const toggleRightSidebar = () => {
-    setRightSidebarOpen(!rightSidebarOpen);
+    setTableSidebarOpen(!tableSidebarOpen);
   };
 
   return (
     <div className="h-full flex justify-between relative">
       {/* Overlay for right sidebar when open on mobile */}
-      {rightSidebarOpen && (
+      {tableSidebarOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
           onClick={toggleRightSidebar}
@@ -94,13 +94,13 @@ const TablePage = ({ sidebarOpen, toggleSidebar }) => {
         onClick={toggleRightSidebar}
         className="fixed top-[26%] right-0 z-50 bg-white p-2 rounded-lg shadow-md text-[#1e62b3] lg:hidden"
       >
-        {rightSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
+        {tableSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
       </button>
 
       {/* Reservation list - right sidebar */}
       <div
         className={`
-        ${rightSidebarOpen ? "translate-x-0" : "translate-x-full"} 
+        ${tableSidebarOpen ? "translate-x-0" : "translate-x-full"} 
         lg:translate-x-0 
         fixed lg:relative lg:block 
         w-96 max-w-[85vw] lg:max-w-none 

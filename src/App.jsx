@@ -51,18 +51,7 @@ const AppLayout = () => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 fixed lg:relative z-50 h-full transition-transform duration-300 ease-in-out`}
       >
-        <div className="relative h-full">
-          <Sidebar />
-          {/* Close button - only on small screens */}
-          {sidebarOpen && (
-            <button
-              onClick={toggleSidebar}
-              className="lg:hidden absolute top-4 right-4 text-white z-50 bg-primary-600 p-2 rounded-full shadow-md"
-            >
-              <FaTimes />
-            </button>
-          )}
-        </div>
+        <Sidebar />
       </div>
 
       {/* Sidebar toggle button - only visible on small screens when sidebar is closed */}
