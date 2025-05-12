@@ -437,7 +437,7 @@ const MenuPage = () => {
         </div>
 
         {cart.length > 0 ? (
-          <div className="space-y-4 mb-6 h-[calc(100vh-280px)] overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
+          <div className="space-y-4 mb-6 h-[62%] lg:h-[63%] xl:h-[68%] overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
             {cart.map((item) => (
               <div key={item.id} className="flex items-start gap-3">
                 <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">

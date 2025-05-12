@@ -33,18 +33,18 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-56 bg-white border-r border-neutral-200 flex flex-col">
+    <aside className="w-56 h-dvh bg-white border-r border-neutral-200 flex flex-col">
       {/* Logo */}
-      <div className="p-6">
+      <div className="px-6 py-6 ">
         <h1 className="text-3xl font-bold text-[#1e62b3]">Yoomy</h1>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-6 space-y-2">
+      <nav className="flex-1 px-2 sm:px-4 space-y-2">
         <NavLink
           to="/dashboard"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 text-lg font-medium rounded-lg transition-all duration-200 
+            `flex items-center gap-3 px-5 sm:px-3 py-3 text-lg font-medium rounded-lg transition-all duration-200 
              ${
                isActive
                  ? "bg-[#1e62b3] text-white"
@@ -59,7 +59,7 @@ const Sidebar = () => {
         <NavLink
           to="/table"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 text-lg font-medium rounded-lg transition-all duration-200 
+            `flex items-center gap-3 px-5 sm:px-3 py-3 text-lg font-medium rounded-lg transition-all duration-200 
              ${
                isActive
                  ? "bg-[#1e62b3] text-white"
@@ -74,7 +74,7 @@ const Sidebar = () => {
         <NavLink
           to="/menu"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 text-lg font-medium rounded-lg transition-all duration-200 
+            `flex items-center gap-3 px-5 sm:px-3 py-3 text-lg font-medium rounded-lg transition-all duration-200 
              ${
                isActive
                  ? "bg-[#1e62b3] text-white"
@@ -89,7 +89,7 @@ const Sidebar = () => {
         <NavLink
           to="/order"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 text-lg font-medium rounded-lg transition-all duration-200 
+            `flex items-center gap-3 px-5 sm:px-3 py-3 text-lg font-medium rounded-lg transition-all duration-200 
              ${
                isActive
                  ? "bg-[#1e62b3] text-white"
@@ -104,7 +104,7 @@ const Sidebar = () => {
         <NavLink
           to="/history"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 text-lg font-medium rounded-lg transition-all duration-200 
+            `flex items-center gap-3 px-5 sm:px-3 py-3 text-lg font-medium rounded-lg transition-all duration-200 
              ${
                isActive
                  ? "bg-[#1e62b3] text-white"
@@ -119,7 +119,7 @@ const Sidebar = () => {
         <NavLink
           to="/setting"
           className={({ isActive }) =>
-            `flex items-center gap-3 px-6 py-3 text-lg font-medium rounded-lg transition-all duration-200 
+            `flex items-center gap-3 px-5 sm:px-3 py-3 text-lg font-medium rounded-lg transition-all duration-200 
              ${
                isActive
                  ? "bg-[#1e62b3] text-white"
@@ -133,7 +133,7 @@ const Sidebar = () => {
       </nav>
 
       {/* User Profile */}
-      <div className="p-4 border-t border-neutral-200">
+      <div className="p-4 md:p-2 border-t border-neutral-200">
         <div className="flex items-center gap-3 p-2">
           <div className="w-10 h-10 bg-[#edf4fb] rounded-full flex items-center justify-center">
             <span className="text-[#1e62b3] font-medium">

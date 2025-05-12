@@ -12,7 +12,7 @@ const TableGrid = ({ tables, onSelectTable }) => {
   return (
     <div className="px-4 sm:px-8 py-4 relative h-full">
       {/* Table Grid - 3 rows of 3 tables */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 md:h-[85%] ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10  ">
         {tables.map((table) => (
           <TableCard
             key={table.id}

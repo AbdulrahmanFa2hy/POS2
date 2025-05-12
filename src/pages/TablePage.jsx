@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { FaArrowLeft, FaArrowRight, FaTimes } from "react-icons/fa";
+import { FaArrowLeft, FaTimes } from "react-icons/fa";
 import Header from "../components/Header";
 import TableGrid from "../components/TableGrid";
 import ReservationList from "../components/ReservationList";
@@ -10,21 +10,30 @@ const tablesData = [
   { id: 1, name: "T1", status: "free", chairs: 2 },
   { id: 2, name: "T2", status: "completed", chairs: 3 },
   { id: 3, name: "T3", status: "inProgress", chairs: 2 },
-  { id: 4, name: "T2", status: "completed", chairs: 2 },
-  { id: 5, name: "T1", status: "free", chairs: 2 },
-  { id: 6, name: "T3", status: "inProgress", chairs: 4 },
-  { id: 7, name: "T1", status: "free", chairs: 4 },
-  { id: 8, name: "T2", status: "completed", chairs: 3 },
-  { id: 9, name: "T3", status: "inProgress", chairs: 4 },
+  { id: 4, name: "T4", status: "completed", chairs: 2 },
+  { id: 5, name: "T5", status: "free", chairs: 2 },
+  { id: 6, name: "T6", status: "inProgress", chairs: 4 },
+  { id: 7, name: "T7", status: "free", chairs: 4 },
+  { id: 8, name: "T8", status: "completed", chairs: 3 },
+  { id: 9, name: "T9", status: "inProgress", chairs: 4 },
+  { id: 10, name: "T1", status: "free", chairs: 2 },
+  { id: 11, name: "T2", status: "completed", chairs: 3 },
+  { id: 12, name: "T3", status: "inProgress", chairs: 2 },
+  { id: 13, name: "T4", status: "completed", chairs: 2 },
+  { id: 14, name: "T5", status: "free", chairs: 2 },
+  { id: 15, name: "T6", status: "inProgress", chairs: 4 },
+  { id: 16, name: "T7", status: "free", chairs: 4 },
+  { id: 17, name: "T8", status: "completed", chairs: 3 },
+  { id: 18, name: "T9", status: "inProgress", chairs: 4 },
 ];
 
 const reservationsData = [
   { id: 1, table: "T1", name: "Ali Adel", people: 4, time: "2:30pm" },
-  { id: 2, table: "T2", name: "Ali Adel", people: 4, time: "2:30pm" },
-  { id: 3, table: "T5", name: "Ali Adel", people: 4, time: "2:30pm" },
-  { id: 4, table: "T1", name: "Ali Adel", people: 4, time: "3:30pm" },
-  { id: 5, table: "T2", name: "Ali Adel", people: 4, time: "3:30pm" },
-  { id: 6, table: "T6", name: "Ali Adel", people: 4, time: "3:30pm" },
+  { id: 2, table: "T2", name: "Gamal Mohamed", people: 4, time: "2:30pm" },
+  { id: 3, table: "T5", name: "Youssef Karam", people: 4, time: "2:30pm" },
+  { id: 4, table: "T1", name: "Gamal Mohamed", people: 4, time: "3:30pm" },
+  { id: 5, table: "T2", name: "Waleed Osama", people: 4, time: "3:30pm" },
+  { id: 6, table: "T6", name: "Waleed Osama", people: 4, time: "3:30pm" },
 ];
 
 const TablePage = () => {
@@ -83,7 +92,7 @@ const TablePage = () => {
         <Header seatingType={seatingType} setSeatingType={setSeatingType} />
 
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-          <div className="flex-1 overflow-y-auto pb-8">
+          <div className="flex-1 overflow-y-auto ">
             <TableGrid tables={tablesData} onSelectTable={handleSelectTable} />
           </div>
         </div>
