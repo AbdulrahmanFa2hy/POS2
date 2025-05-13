@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  FaSearch,
-  FaMinus,
-  FaPlus,
-  FaUser,
-  FaChevronDown,
-  FaArrowLeft,
-  FaTimes,
-} from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { FaArrowLeft, FaTimes } from "react-icons/fa";
+import MenuHeader from "../components/menu/MenuHeader";
+import MenuGrid from "../components/menu/MenuGrid";
+import MenuSidebar from "../components/menu/MenuSidebar";
 
 import img1 from "../assets/img1.jpeg";
 import img2 from "../assets/img2.jpeg";
@@ -22,15 +18,53 @@ import img9 from "../assets/img9.jpeg";
 
 const MenuPage = () => {
   const [activeCategory, setActiveCategory] = useState("pizza");
-  const [selectedTable, setSelectedTable] = useState("Table 1");
   const [orderNumber, setOrderNumber] = useState("#22222");
   const [searchQuery, setSearchQuery] = useState("");
   const [showTableDropdown, setShowTableDropdown] = useState(false);
   const [cart, setCart] = useState([]);
+  const [customerName, setCustomerName] = useState("Guest");
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(
     window.innerWidth >= 768
   );
+
   const location = useLocation();
+
+  // Get URL query parameters
+  const queryParams = new URLSearchParams(location.search);
+  const tableIdFromUrl = queryParams.get("table");
+
+  // Get table data from Redux store
+  const tables = useSelector((state) => state.table.tables);
+
+  // Find the selected table from the table ID in URL
+  const selectedTableObj = tables.find(
+    (table) => table.id === tableIdFromUrl || table._id === tableIdFromUrl
+  );
+
+  // Create the table name (e.g., "Table 1")
+  const [selectedTable, setSelectedTable] = useState(() => {
+    if (selectedTableObj) {
+      const tableName =
+        selectedTableObj.name || selectedTableObj.number || tableIdFromUrl;
+      return `Table ${tableName}`;
+    }
+    return "Table 1"; // Default if no table is specified
+  });
+
+  // Update selected table whenever the URL parameter changes
+  useEffect(() => {
+    if (tableIdFromUrl && tables.length > 0) {
+      const foundTable = tables.find(
+        (table) => table.id === tableIdFromUrl || table._id === tableIdFromUrl
+      );
+
+      if (foundTable) {
+        const tableName =
+          foundTable.name || foundTable.number || tableIdFromUrl;
+        setSelectedTable(`Table ${tableName}`);
+      }
+    }
+  }, [tableIdFromUrl, tables]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -48,15 +82,16 @@ const MenuPage = () => {
     if (window.innerWidth < 1000) {
       setMenuSidebarOpen(false);
     }
-  }, [location]);
+  }, [location.pathname]);
 
-  const availableTables = [
-    "Table 1",
-    "Table 2",
-    "Table 3",
-    "Table 4",
-    "Table 5",
-  ];
+  // Generate available tables list from Redux store
+  const availableTables =
+    tables.length > 0
+      ? tables.map((table) => {
+          const tableName = table.name || table.number || table.id || table._id;
+          return `Table ${tableName}`;
+        })
+      : ["Table 1", "Table 2", "Table 3", "Table 4", "Table 5"];
 
   const toggleRightSidebar = () => {
     setMenuSidebarOpen(!menuSidebarOpen);
@@ -262,109 +297,23 @@ const MenuPage = () => {
         />
       )}
 
-      <div className="flex-1 p-2 sm:p-8 overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
-        <div className="flex items-center gap-4 mb-8 flex-wrap">
-          <button
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
-              activeCategory === "pizza"
-                ? "bg-primary-600 text-white"
-                : "bg-white text-neutral-700"
-            }`}
-            onClick={() => setActiveCategory("pizza")}
-          >
-            <span className="text-xl">🍕</span>
-            Pizza
-          </button>
-          <button
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
-              activeCategory === "main"
-                ? "bg-primary-600 text-white"
-                : "bg-white text-neutral-700"
-            }`}
-            onClick={() => setActiveCategory("main")}
-          >
-            <span className="text-xl">🍽️</span>
-            Main dishes
-          </button>
-          <button
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
-              activeCategory === "appetizers"
-                ? "bg-primary-600 text-white"
-                : "bg-white text-neutral-700"
-            }`}
-            onClick={() => setActiveCategory("appetizers")}
-          >
-            <span className="text-xl">🥗</span>
-            Appetizers
-          </button>
-          <button
-            className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
-              activeCategory === "drinks"
-                ? "bg-primary-600 text-white"
-                : "bg-white text-neutral-700"
-            }`}
-            onClick={() => setActiveCategory("drinks")}
-          >
-            <span className="text-xl">🥤</span>
-            Drinks
-          </button>
-        </div>
+      <div className="flex-1 overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
+        <MenuHeader
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          getCategoryTitle={getCategoryTitle}
+        />
 
-        <div className="flex justify-between items-center ">
-          <h2 className="hidden sm:block sm:text-2xl font-bold mb-6">
-            {getCategoryTitle()}
-          </h2>
-          <div className="relative mb-6 w-[70%] s ml-2 sm:ml-0 sm:w-1/2">
-            <input
-              type="text"
-              placeholder="Search menu items..."
-              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredMenuItems.length > 0 ? (
-            filteredMenuItems.map((item) => (
-              <div key={item.id} className="bg-white rounded-xl p-4 shadow-sm">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-                <h3 className="text-lg font-semibold text-primary-600 mb-1">
-                  {item.name}
-                </h3>
-                <p className="text-lg font-bold mb-2">
-                  {item.price} {item.currency}
-                </p>
-                <p className="text-sm text-neutral-600 mb-4 line-clamp-3">
-                  {item.description}
-                </p>
-                <button
-                  className="w-full py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-                  onClick={() => addToCart(item)}
-                >
-                  Add to Order
-                </button>
-              </div>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-8">
-              <p className="text-neutral-500">
-                No items found matching your search criteria.
-              </p>
-            </div>
-          )}
+        <div className="px-2 sm:px-8 pb-8">
+          <MenuGrid menuItems={filteredMenuItems} addToCart={addToCart} />
         </div>
       </div>
 
       <button
         onClick={toggleRightSidebar}
-        className="fixed top-[26%] right-0 z-50 bg-white p-2 rounded-lg shadow-md text-[#1e62b3] lg:hidden"
+        className="fixed top-[22%] right-0 z-10 bg-white h-20 p-1 rounded-md shadow-lg  text-primary-600 lg:hidden"
       >
         {menuSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
       </button>
@@ -375,166 +324,29 @@ const MenuPage = () => {
           lg:translate-x-0 
           fixed lg:relative lg:block 
           w-80 max-w-[80vw] lg:max-w-none 
-          bg-white border-l border-neutral-200 p-4 sm:p-6 
+          bg-white border-l border-neutral-200
           right-0 h-full z-50
           transition-transform duration-300 ease-in-out
         `}
       >
-        <div className="flex justify-between">
-          <div className="relative">
-            <button
-              className="font-medium flex items-center gap-1"
-              onClick={() => setShowTableDropdown(!showTableDropdown)}
-            >
-              {selectedTable} <FaChevronDown className="text-xs" />
-            </button>
-
-            {showTableDropdown && (
-              <div className="absolute z-10 mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg w-40">
-                {availableTables.map((table) => (
-                  <button
-                    key={table}
-                    className={`w-full text-left px-3 py-2 hover:bg-neutral-50 ${
-                      selectedTable === table
-                        ? "font-medium text-primary-600"
-                        : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedTable(table);
-                      setShowTableDropdown(false);
-                    }}
-                  >
-                    {table}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <p className="text-sm text-neutral-500">{orderNumber}</p>
-        </div>
-
-        <div className="flex justify-center items-center gap-3 mt-4 mb-6">
-          <button
-            className={`px-2 sm:px-4 py-1 text-sm ${
-              orderType === "dine-in"
-                ? "bg-danger-600 text-white"
-                : "border border-primary-600 text-primary-600"
-            } rounded-lg w-1/2`}
-            onClick={() => setOrderType("dine-in")}
-          >
-            Dine in
-          </button>
-          <button
-            className={`px-2 sm:px-4 py-1 text-sm ${
-              orderType === "takeaway"
-                ? "bg-danger-600 text-white"
-                : "border border-primary-600 text-primary-600"
-            } rounded-lg w-1/2`}
-            onClick={() => setOrderType("takeaway")}
-          >
-            Take Away
-          </button>
-        </div>
-
-        {cart.length > 0 ? (
-          <div className="space-y-4 mb-6 h-[62%] lg:h-[63%] xl:h-[68%] overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
-            {cart.map((item) => (
-              <div key={item.id} className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span className="text-xl">
-                    {item.category === "pizza"
-                      ? "🍕"
-                      : item.category === "main"
-                      ? "🍽️"
-                      : item.category === "appetizers"
-                      ? "🥗"
-                      : item.category === "drinks"
-                      ? "🥤"
-                      : "🍴"}
-                  </span>
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between">
-                    <h4 className="font-medium text-primary-600">
-                      {item.name}
-                    </h4>
-                  </div>
-                  {item.note && (
-                    <p className="text-sm text-neutral-500">
-                      Note: {item.note}
-                    </p>
-                  )}
-                  <p className="font-medium">
-                    {item.price} {item.currency}
-                  </p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <button
-                      className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center"
-                      onClick={() => updateQuantity(item.id, -1)}
-                    >
-                      <FaMinus className="text-xs" />
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button
-                      className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center"
-                      onClick={() => updateQuantity(item.id, 1)}
-                    >
-                      <FaPlus className="text-xs" />
-                    </button>
-                    <button className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center ml-auto">
-                      <FaUser className="text-xs" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 mb-6]">
-            <p className="text-neutral-500">Your order is empty</p>
-            <p className="text-sm text-neutral-400">Add items from the menu</p>
-          </div>
-        )}
-
-        {cart.length > 0 && (
-          <div className="border-t border-neutral-200 pt-4 mb-6">
-            <div className="flex justify-between">
-              <span className="font-medium">Total</span>
-              <span className="font-bold">{calculateTotal()} AED</span>
-            </div>
-          </div>
-        )}
-
-        <div className="flex gap-3">
-          <button
-            className={`flex-1 py-2 rounded-lg transition-colors ${
-              cart.length === 0
-                ? "bg-neutral-300 text-neutral-500 cursor-not-allowed"
-                : "bg-primary-600 text-white hover:bg-primary-700"
-            }`}
-            disabled={cart.length === 0}
-            onClick={() => {
-              if (cart.length > 0) {
-                alert(`Order ${orderNumber} for ${selectedTable} completed!`);
-                generateNewOrder();
-                setCart([]);
-              }
-            }}
-          >
-            Done
-          </button>
-          <button
-            className={`flex-1 py-2 border rounded-lg transition-colors ${
-              cart.length === 0
-                ? "border-neutral-200 text-neutral-400 cursor-not-allowed"
-                : "border-neutral-300 hover:bg-neutral-50"
-            }`}
-            onClick={() => setCart([])}
-            disabled={cart.length === 0}
-          >
-            Cancel
-          </button>
-        </div>
+        <MenuSidebar
+          cart={cart}
+          selectedTable={selectedTable}
+          availableTables={availableTables}
+          orderNumber={orderNumber}
+          orderType={orderType}
+          updateQuantity={updateQuantity}
+          setSelectedTable={setSelectedTable}
+          calculateTotal={calculateTotal}
+          showTableDropdown={showTableDropdown}
+          setShowTableDropdown={setShowTableDropdown}
+          setOrderType={setOrderType}
+          generateNewOrder={generateNewOrder}
+          setCart={setCart}
+          customerName={customerName}
+          setCustomerName={setCustomerName}
+          fromTableReservation={!!tableIdFromUrl}
+        />
       </div>
     </div>
   );

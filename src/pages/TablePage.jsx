@@ -1,50 +1,38 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { FaArrowLeft, FaTimes } from "react-icons/fa";
-import Header from "../components/Header";
-import TableGrid from "../components/TableGrid";
-import ReservationList from "../components/ReservationList";
+import TableHeader from "../components/table/TableHeader";
+import TableGrid from "../components/table/TableGrid";
+import TableSidebar from "../components/table/TableSidebar";
+import { fetchTables, selectTable } from "../store/tableSlice";
 
-// Sample data
-const tablesData = [
-  { id: 1, name: "T1", status: "free", chairs: 2 },
-  { id: 2, name: "T2", status: "completed", chairs: 3 },
-  { id: 3, name: "T3", status: "inProgress", chairs: 2 },
-  { id: 4, name: "T4", status: "completed", chairs: 2 },
-  { id: 5, name: "T5", status: "free", chairs: 2 },
-  { id: 6, name: "T6", status: "inProgress", chairs: 4 },
-  { id: 7, name: "T7", status: "free", chairs: 4 },
-  { id: 8, name: "T8", status: "completed", chairs: 3 },
-  { id: 9, name: "T9", status: "inProgress", chairs: 4 },
-  { id: 10, name: "T1", status: "free", chairs: 2 },
-  { id: 11, name: "T2", status: "completed", chairs: 3 },
-  { id: 12, name: "T3", status: "inProgress", chairs: 2 },
-  { id: 13, name: "T4", status: "completed", chairs: 2 },
-  { id: 14, name: "T5", status: "free", chairs: 2 },
-  { id: 15, name: "T6", status: "inProgress", chairs: 4 },
-  { id: 16, name: "T7", status: "free", chairs: 4 },
-  { id: 17, name: "T8", status: "completed", chairs: 3 },
-  { id: 18, name: "T9", status: "inProgress", chairs: 4 },
-];
-
+// Sample reservations data for demo
 const reservationsData = [
-  { id: 1, table: "T1", name: "Ali Adel", people: 4, time: "2:30pm" },
-  { id: 2, table: "T2", name: "Gamal Mohamed", people: 4, time: "2:30pm" },
-  { id: 3, table: "T5", name: "Youssef Karam", people: 4, time: "2:30pm" },
-  { id: 4, table: "T1", name: "Gamal Mohamed", people: 4, time: "3:30pm" },
-  { id: 5, table: "T2", name: "Waleed Osama", people: 4, time: "3:30pm" },
-  { id: 6, table: "T6", name: "Waleed Osama", people: 4, time: "3:30pm" },
+  { id: 1, table: "1", name: "Ali Adel", people: 4, time: "2:30pm" },
+  { id: 2, table: "2", name: "Gamal Mohamed", people: 4, time: "2:30pm" },
+  { id: 3, table: "5", name: "Youssef Karam", people: 4, time: "2:30pm" },
+  { id: 4, table: "1", name: "Gamal Mohamed", people: 4, time: "3:30pm" },
+  { id: 5, table: "2", name: "Waleed Osama", people: 4, time: "3:30pm" },
+  { id: 6, table: "6", name: "Waleed Osama", people: 4, time: "3:30pm" },
 ];
 
 const TablePage = () => {
   const [seatingType, setSeatingType] = useState("indoor");
-  // selectedTable will be used for future functionality to handle table operations
-  const [selectedTable, setSelectedTable] = useState(null); // eslint-disable-line no-unused-vars
-  // Set rightSidebarOpen to false by default on small screens and true on large screens and up
+  // Set tableSidebarOpen to false by default on small screens and true on large screens and up
   const [tableSidebarOpen, setTableSidebarOpen] = useState(
     window.innerWidth >= 1024
   );
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  // Get tables data from Redux store
+  const { tables, loading, error } = useSelector((state) => state.table);
+
+  // Fetch tables when component mounts
+  useEffect(() => {
+    dispatch(fetchTables());
+  }, [dispatch]);
 
   // Check window size on initial render and set sidebar state accordingly
   useEffect(() => {
@@ -71,7 +59,7 @@ const TablePage = () => {
   }, [location]);
 
   const handleSelectTable = (tableId) => {
-    setSelectedTable(tableId);
+    dispatch(selectTable(tableId));
   };
 
   const toggleRightSidebar = () => {
@@ -89,11 +77,24 @@ const TablePage = () => {
       )}
 
       <div className="flex flex-col w-full">
-        <Header seatingType={seatingType} setSeatingType={setSeatingType} />
+        <TableHeader
+          seatingType={seatingType}
+          setSeatingType={setSeatingType}
+        />
 
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
           <div className="flex-1 overflow-y-auto ">
-            <TableGrid tables={tablesData} onSelectTable={handleSelectTable} />
+            {loading ? (
+              <div className="flex justify-center items-center h-full">
+                <p>Loading tables...</p>
+              </div>
+            ) : error ? (
+              <div className="flex justify-center items-center h-full">
+                <p className="text-red-500">Error: {error}</p>
+              </div>
+            ) : (
+              <TableGrid tables={tables} onSelectTable={handleSelectTable} />
+            )}
           </div>
         </div>
       </div>
@@ -101,7 +102,7 @@ const TablePage = () => {
       {/* Right sidebar toggle button */}
       <button
         onClick={toggleRightSidebar}
-        className="fixed top-[26%] right-0 z-50 bg-white p-2 rounded-lg shadow-md text-[#1e62b3] lg:hidden"
+        className="fixed top-[22%] right-0 z-10 bg-white h-20 p-1 rounded-md shadow-lg text-primary-600 lg:hidden"
       >
         {tableSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
       </button>
@@ -120,7 +121,7 @@ const TablePage = () => {
         transition-transform duration-300 ease-in-out
       `}
       >
-        <ReservationList reservations={reservationsData} />
+        <TableSidebar reservations={reservationsData} />
       </div>
     </div>
   );

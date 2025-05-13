@@ -1,8 +1,10 @@
 // API URLs
 export const API_BASE_URL = "https://cashier.up.railway.app";
+// 'https://cors-anywhere.herokuapp.com/https://cashier.up.railway.app/api/v1/auth/login'
 export const API_ENDPOINTS = {
   SIGNUP: "/api/v1/auth/signup",
   LOGIN: "/api/v1/auth/login",
+  TABLES: "/api/v1/table/",
 };
 
 // Routes

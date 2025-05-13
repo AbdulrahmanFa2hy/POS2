@@ -8,8 +8,8 @@ import {
 import { Provider } from "react-redux";
 import store from "./store";
 import { useState, useEffect } from "react";
-import { FaArrowRight, FaTimes } from "react-icons/fa";
-import Sidebar from "./components/Sidebar";
+import { FaArrowRight } from "react-icons/fa";
+import MainSidebar from "./components/MainSidebar";
 import TablePage from "./pages/TablePage";
 import MenuPage from "./pages/MenuPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -49,16 +49,16 @@ const AppLayout = () => {
       <div
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:relative z-50 h-full transition-transform duration-300 ease-in-out`}
+        } w-[70%] sm:w-[50%] md:w-[40%] lg:w-56 lg:translate-x-0 fixed lg:relative z-50 h-full transition-transform duration-300 ease-in-out`}
       >
-        <Sidebar />
+        <MainSidebar />
       </div>
 
       {/* Sidebar toggle button - only visible on small screens when sidebar is closed */}
       {!sidebarOpen && (
         <button
           onClick={toggleSidebar}
-          className="lg:hidden fixed top-[41%] left-0 z-50 bg-white p-2 rounded-lg shadow-md text-[#1e62b3]"
+          className="lg:hidden fixed top-[80%] left-0 z-10 bg-white h-20 p-1 rounded-lg shadow-xl text-primary-600"
         >
           <FaArrowRight />
         </button>
