@@ -313,7 +313,7 @@ const MenuPage = () => {
 
       <button
         onClick={toggleRightSidebar}
-        className="fixed top-[22%] right-0 z-10 bg-white h-20 p-1 rounded-md shadow-lg  text-primary-600 lg:hidden"
+        className="fixed top-[22%] right-0 z-10 bg-white h-16 p-[5px] text-lg border border-primary-200 rounded-tl-lg rounded-bl-lg shadow-xl text-primary-600"
       >
         {menuSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
       </button>

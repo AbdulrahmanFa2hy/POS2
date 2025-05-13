@@ -67,18 +67,6 @@ const TableSidebar = ({ reservations }) => {
           <ReservationItem key={time} time={time} reservations={reservations} />
         ))}
       </div>
-
-      {/* Fixed Footer */}
-      {/* <div className="mt-auto border-t border-neutral-200 pt-4">
-        <div className="flex gap-3">
-          <button className="flex-1 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors">
-            Reservation
-          </button>
-          <button className="flex-1 py-2 border rounded-lg hover:bg-neutral-50 transition-colors">
-            Export
-          </button>
-        </div>
-      </div> */}
     </div>
   );
 };

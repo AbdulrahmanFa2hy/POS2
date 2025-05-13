@@ -41,16 +41,17 @@ const TableBottom = () => {
       {/* Actions */}
       <div className="mt-6 md:mt-0 flex justify-center md:justify-end gap-4">
         <button
-          className={`btn ${
-            selectedTable ? "btn-primary" : "btn-disabled"
+          className={`px-4 py-2 rounded-md bg-primary-600 text-white hover:bg-primary-700 transition-colors ${
+            !selectedTable && "cursor-not-allowed bg-primary-300"
           } text-sm`}
           onClick={handleReservation}
           disabled={!selectedTable}
+          title={`${selectedTable ? "book table" : "select table first"}`}
         >
           Reservation
         </button>
         <button
-          className="btn btn-secondary text-sm"
+          className="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-sm"
           onClick={() => navigate("/table")}
         >
           Cancel
