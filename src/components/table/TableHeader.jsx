@@ -35,21 +35,21 @@ const TableHeader = ({ seatingType, setSeatingType }) => {
         <div className="flex gap-2 justify-center md:justify-start">
           <button
             className={`py-2 px-4 rounded-lg transition-colors ${
-              seatingType === "indoor"
+              seatingType === "inside"
                 ? "bg-primary-600 text-white"
                 : "bg-white text-neutral-700"
             }`}
-            onClick={() => setSeatingType("indoor")}
+            onClick={() => setSeatingType("inside")}
           >
             Indoor
           </button>
           <button
             className={`py-2 px-4 rounded-lg transition-colors ${
-              seatingType === "outdoor"
+              seatingType === "outside"
                 ? "bg-primary-600 text-white"
                 : "bg-white text-neutral-700"
             }`}
-            onClick={() => setSeatingType("outdoor")}
+            onClick={() => setSeatingType("outside")}
           >
             Outdoor
           </button>

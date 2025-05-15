@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { FaMinus, FaPlus, FaChevronDown, FaUser, FaEdit } from "react-icons/fa";
+import { FaChevronDown, FaUserEdit } from "react-icons/fa";
 import ConfirmOrder from "./ConfirmOrder";
-import { reserveTable, clearSelectedTable } from "../../store/tableSlice";
+import MenuSidebarItem from "./MenuSidebarItem";
+import { clearSelectedTable } from "../../store/tableSlice";
 
 const MenuSidebar = ({
   cart,
@@ -12,6 +13,7 @@ const MenuSidebar = ({
   orderNumber,
   orderType,
   updateQuantity,
+  updateItemNote,
   setSelectedTable,
   calculateTotal,
   showTableDropdown,
@@ -30,9 +32,6 @@ const MenuSidebar = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Extract table ID from selectedTable (e.g., "Table 1" → "1")
-  const tableId = selectedTable.replace(/[^\d]/g, "");
-
   const handleDone = () => {
     if (cart.length > 0) {
       setShowConfirmation(true);
@@ -41,30 +40,6 @@ const MenuSidebar = ({
 
   const handleSendToKitchen = () => {
     if (fromTableReservation) {
-      // Create order details from cart
-      const orderDetails = {
-        items: cart.map((item) => ({
-          id: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-          note: item.note || "",
-        })),
-        total: total,
-        orderType: orderType,
-        orderNumber: orderNumber,
-      };
-
-      // Dispatch reserve table action
-      dispatch(
-        reserveTable({
-          tableId,
-          customerName,
-          orderDetails,
-        })
-      );
-
-      // Clear selected table
       dispatch(clearSelectedTable());
     }
 
@@ -81,30 +56,6 @@ const MenuSidebar = ({
 
   const handleSendToCashier = () => {
     if (fromTableReservation) {
-      // Create order details from cart
-      const orderDetails = {
-        items: cart.map((item) => ({
-          id: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-          note: item.note || "",
-        })),
-        total: total,
-        orderType: orderType,
-        orderNumber: orderNumber,
-      };
-
-      // Dispatch reserve table action
-      dispatch(
-        reserveTable({
-          tableId,
-          customerName,
-          orderDetails,
-        })
-      );
-
-      // Clear selected table
       dispatch(clearSelectedTable());
     }
 
@@ -181,7 +132,7 @@ const MenuSidebar = ({
             onClick={() => setShowCustomerNameInput(true)}
           >
             {customerName || "Guest"}
-            <FaEdit className="text-xs text-primary-600" />
+            <FaUserEdit className="text-sm text-primary-600" />
           </button>
           {showCustomerNameInput && (
             <div className="absolute left-12 z-20 mt-1 flex flex-col gap-2 bg-white border border-neutral-200 rounded-lg shadow-lg p-2">
@@ -231,57 +182,14 @@ const MenuSidebar = ({
 
       <div className="flex-1 overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
         {cart.length > 0 ? (
-          <div className="space-y-4 mb-6">
+          <div className="space-y-1 mb-6">
             {cart.map((item) => (
-              <div key={item.id} className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                  <span className="text-xl">
-                    {item.category === "pizza"
-                      ? "🍕"
-                      : item.category === "main"
-                      ? "🍽️"
-                      : item.category === "appetizers"
-                      ? "🥗"
-                      : item.category === "drinks"
-                      ? "🥤"
-                      : "🍴"}
-                  </span>
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex justify-between">
-                    <h4 className="font-medium text-primary-600">
-                      {item.name}
-                    </h4>
-                  </div>
-                  {item.note && (
-                    <p className="text-sm text-neutral-500">
-                      Note: {item.note}
-                    </p>
-                  )}
-                  <p className="font-medium">
-                    {item.price} {item.currency}
-                  </p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <button
-                      className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center"
-                      onClick={() => updateQuantity(item.id, -1)}
-                    >
-                      <FaMinus className="text-xs" />
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button
-                      className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center"
-                      onClick={() => updateQuantity(item.id, 1)}
-                    >
-                      <FaPlus className="text-xs" />
-                    </button>
-                    <button className="w-6 h-6 rounded-full border border-neutral-300 flex items-center justify-center ml-auto">
-                      <FaUser className="text-xs" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <MenuSidebarItem
+                key={item._id}
+                item={item}
+                updateQuantity={updateQuantity}
+                updateItemNote={updateItemNote}
+              />
             ))}
           </div>
         ) : (

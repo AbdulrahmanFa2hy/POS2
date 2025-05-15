@@ -18,7 +18,7 @@ const reservationsData = [
 ];
 
 const TablePage = () => {
-  const [seatingType, setSeatingType] = useState("indoor");
+  const [seatingType, setSeatingType] = useState("inside");
   // Set tableSidebarOpen to false by default on small screens and true on large screens and up
   const [tableSidebarOpen, setTableSidebarOpen] = useState(
     window.innerWidth >= 1024
@@ -82,8 +82,8 @@ const TablePage = () => {
           setSeatingType={setSeatingType}
         />
 
-        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-          <div className="flex-1 overflow-y-auto ">
+        <div className="flex-1 flex flex-col lg:flex-row overflow-hidden ">
+          <div className="flex-1 overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
             {loading ? (
               <div className="flex justify-center items-center h-full">
                 <p>Loading tables...</p>
@@ -93,7 +93,11 @@ const TablePage = () => {
                 <p className="text-red-500">Error: {error}</p>
               </div>
             ) : (
-              <TableGrid tables={tables} onSelectTable={handleSelectTable} />
+              <TableGrid
+                tables={tables}
+                onSelectTable={handleSelectTable}
+                seatingType={seatingType}
+              />
             )}
           </div>
         </div>

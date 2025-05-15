@@ -34,9 +34,11 @@ export const login = createAsyncThunk(
 
 // Initial state
 const initialState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   token: localStorage.getItem("token") || null,
-  isAuthenticated: !!localStorage.getItem("token"),
+  isAuthenticated: !!(
+    localStorage.getItem("token") && localStorage.getItem("user")
+  ),
   loading: false,
   error: null,
   successMessage: null,
@@ -55,6 +57,7 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
@@ -75,9 +78,10 @@ const authSlice = createSlice({
         // Check if the response contains a token
         if (action.payload.token) {
           state.token = action.payload.token;
-          state.user = action.payload.user;
+          state.user = action.payload.data;
           state.isAuthenticated = true;
           localStorage.setItem("token", action.payload.token);
+          localStorage.setItem("user", JSON.stringify(action.payload.data));
         }
 
         state.successMessage = action.payload.message || "Sign up successful";
@@ -96,11 +100,12 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.user = action.payload.data;
         state.isAuthenticated = true;
-        state.successMessage = "Login successful";
+        state.successMessage = action.payload.message || "Login successful";
 
         localStorage.setItem("token", action.payload.token);
+        localStorage.setItem("user", JSON.stringify(action.payload.data));
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;

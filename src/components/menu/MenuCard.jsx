@@ -1,18 +1,20 @@
+import imageUrl from "../../assets/img1.jpeg";
+
 const MenuCard = ({ item, addToCart }) => {
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm">
+    <div className="bg-white rounded-xl p-2 shadow-sm">
       <img
-        src={item.image}
+        src={imageUrl}
         alt={item.name}
-        className="w-full h-48 object-cover rounded-lg mb-4"
+        className="w-full h-48 object-cover rounded-lg mb-2"
       />
       <h3 className="text-lg font-semibold text-primary-600 mb-1">
         {item.name}
       </h3>
-      <p className="text-lg font-bold mb-2">
+      <p className="text-lg font-bold mb-1">
         {item.price} {item.currency}
       </p>
-      <p className="text-sm text-neutral-600 mb-4 line-clamp-3">
+      <p className="text-sm text-neutral-600 mb-1 line-clamp-3 h-[40px]">
         {item.description}
       </p>
       <button

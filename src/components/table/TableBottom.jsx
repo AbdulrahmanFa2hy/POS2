@@ -15,7 +15,7 @@ const TableBottom = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center sm:flex-row sm:justify-between items-center flex-wrap pt-10 pb-4">
+    <div className="flex flex-col justify-center sm:flex-row sm:justify-between items-center py-4">
       {/* Status Legend */}
       <div className="flex flex-wrap gap-4">
         <div className="flex items-center gap-2">
@@ -23,12 +23,8 @@ const TableBottom = () => {
           <span className="text-sm">Free</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 sm:w-6 sm:h-6 rounded bg-inProgress"></div>
-          <span className="text-sm">In Progress</span>
-        </div>
-        <div className="flex items-center gap-2">
           <div className="w-4 h-4 sm:w-6 sm:h-6 rounded bg-completed"></div>
-          <span className="text-sm">Completed</span>
+          <span className="text-sm">Booked</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-5 h-4 sm:w-6 sm:h-6 flex items-center justify-center border border-primary-600 rounded">
@@ -48,13 +44,7 @@ const TableBottom = () => {
           disabled={!selectedTable}
           title={`${selectedTable ? "book table" : "select table first"}`}
         >
-          Reservation
-        </button>
-        <button
-          className="px-4 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-sm"
-          onClick={() => navigate("/table")}
-        >
-          Cancel
+          Book Table
         </button>
       </div>
     </div>

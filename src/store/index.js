@@ -1,14 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import tableReducer from "./tableSlice";
+import mealReducer from "./mealSlice";
+import orderReducer from "./orderSlice";
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     table: tableReducer,
-    // Add more reducers here as your app grows
+    meals: mealReducer,
+    order: orderReducer,
   },
-  // Redux Thunk is included by default in configureStore
 });
 
 export default store;
