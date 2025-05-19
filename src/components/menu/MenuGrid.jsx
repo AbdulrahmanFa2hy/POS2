@@ -2,7 +2,7 @@ import MenuCard from "./MenuCard";
 
 const MenuGrid = ({ menuItems, addToCart }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
       {menuItems.length > 0 ? (
         menuItems.map((item) => (
           <MenuCard key={item._id} item={item} addToCart={addToCart} />

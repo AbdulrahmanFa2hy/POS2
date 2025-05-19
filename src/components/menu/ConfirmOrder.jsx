@@ -11,10 +11,9 @@ const ConfirmOrder = ({
   isOpen,
   onClose,
   onSendToKitchen,
-  onSendToCashier,
   cart,
   orderNumber,
-  orderType,
+  type,
   customerName,
   selectedTable,
   totalAmount,
@@ -50,7 +49,7 @@ const ConfirmOrder = ({
     hour12: true,
   });
 
-  const handleCreateOrder = async (destination) => {
+  const handleCreateOrder = async () => {
     // Prepare order items
     const orderItems = cart.map((item) => ({
       mealId: item._id,
@@ -60,19 +59,14 @@ const ConfirmOrder = ({
     try {
       const orderData = {
         orderItems,
-        orderType,
-        ...(orderType === "dine-in" ? { tableNumber } : {}),
+        type: type === "dine-in" ? "dine_in" : "takeaway",
+        ...(type === "dine-in" ? { tableNumber } : {}),
       };
 
       await dispatch(createOrder(orderData)).unwrap();
-      if (destination === "kitchen") {
-        onSendToKitchen();
-      } else {
-        onSendToCashier();
-      }
+      onSendToKitchen();
     } catch (err) {
       console.error("Failed to create order:", err);
-      // You might want to show an error message to the user here
     }
   };
 
@@ -90,7 +84,7 @@ const ConfirmOrder = ({
 
           <div className="text-center mb-6">
             <div className="flex justify-center items-center gap-4">
-              {orderType === "dine-in" && (
+              {type === "dine-in" && (
                 <div className="bg-primary-700 text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold">
                   T{tableNumber}
                 </div>
@@ -100,7 +94,7 @@ const ConfirmOrder = ({
                 <h2 className="text-lg font-semibold">{customerName}</h2>
                 <p className="text-xs text-neutral-500">
                   order {orderNumber.replace("#", "")} /{" "}
-                  {orderType === "dine-in" ? "dine in" : "takeaway"}
+                  {type === "dine-in" ? "dine in" : "takeaway"}
                 </p>
               </div>
             </div>
@@ -147,19 +141,16 @@ const ConfirmOrder = ({
               className={`flex-1 bg-[#EEAA42] text-white py-2 rounded hover:bg-[#bf8021] transition-colors ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
-              onClick={() => handleCreateOrder("kitchen")}
+              onClick={handleCreateOrder}
               disabled={loading}
             >
-              {loading ? "Processing..." : "Send kitchen"}
+              {loading ? "Processing..." : "Prepare order"}
             </button>
             <button
-              className={`flex-1 bg-[#09AE94] text-white py-2 rounded hover:bg-[#219483] transition-colors ${
-                loading ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={() => handleCreateOrder("cashier")}
-              disabled={loading}
+              className={`flex-1 bg-white border border-neutral-300 text-neutral-700 py-2 rounded hover:bg-neutral-50 transition-colors`}
+              onClick={onClose}
             >
-              {loading ? "Processing..." : "Send cashier"}
+              Cancel
             </button>
           </div>
         </div>

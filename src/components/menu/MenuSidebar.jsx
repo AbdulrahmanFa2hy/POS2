@@ -54,22 +54,6 @@ const MenuSidebar = ({
     }
   };
 
-  const handleSendToCashier = () => {
-    if (fromTableReservation) {
-      dispatch(clearSelectedTable());
-    }
-
-    // Logic to send order to cashier
-    setShowConfirmation(false);
-    generateNewOrder();
-    setCart([]);
-
-    // If this was from a table reservation, navigate back to tables page
-    if (fromTableReservation) {
-      navigate("/table");
-    }
-  };
-
   const handleCancel = () => {
     setShowConfirmation(false);
   };
@@ -132,7 +116,7 @@ const MenuSidebar = ({
             onClick={() => setShowCustomerNameInput(true)}
           >
             {customerName || "Guest"}
-            <FaUserEdit className="text-sm text-primary-600" />
+            <FaUserEdit className="text-sm text-primary-800" />
           </button>
           {showCustomerNameInput && (
             <div className="absolute left-12 z-20 mt-1 flex flex-col gap-2 bg-white border border-neutral-200 rounded-lg shadow-lg p-2">
@@ -140,7 +124,7 @@ const MenuSidebar = ({
                 type="text"
                 value={tempCustomerName}
                 onChange={(e) => setTempCustomerName(e.target.value)}
-                className="border border-neutral-300 rounded-lg px-2 py-2 text-sm focus:outline-primary-500"
+                className="border border-neutral-300 rounded-lg px-2 py-2 text-sm focus:outline-primary-800"
                 placeholder="Customer name"
               />
               <button
@@ -159,8 +143,8 @@ const MenuSidebar = ({
         <button
           className={`flex-1 py-1 rounded-lg transition-colors ${
             orderType === "dine-in"
-              ? "bg-danger-600 text-white"
-              : "bg-white border border-primary-500 text-primary-700"
+              ? "bg-danger-500 text-white"
+              : "bg-white border border-primary-800 text-primary-800"
           }`}
           onClick={() => setOrderType("dine-in")}
           disabled={fromTableReservation} // Disable order type change if from reservation
@@ -170,8 +154,8 @@ const MenuSidebar = ({
         <button
           className={`flex-1 py-1 rounded-lg transition-colors ${
             orderType === "takeaway"
-              ? "bg-danger-600 text-white"
-              : "bg-white border border-primary-500 text-primary-700"
+              ? "bg-danger-500 text-white"
+              : "bg-white border border-primary-800 text-primary-800"
           }`}
           onClick={() => setOrderType("takeaway")}
           disabled={fromTableReservation} // Disable order type change if from reservation
@@ -217,7 +201,7 @@ const MenuSidebar = ({
             className={`flex-1 py-2 rounded-lg transition-colors ${
               cart.length === 0
                 ? "bg-neutral-300 text-neutral-500 cursor-not-allowed"
-                : "bg-primary-600 text-white hover:bg-primary-700"
+                : "bg-primary-800 text-white hover:bg-primary-900"
             }`}
             disabled={cart.length === 0}
             onClick={handleDone}
@@ -225,7 +209,7 @@ const MenuSidebar = ({
             Done
           </button>
           <button
-            className={`flex-1 py-2 border rounded-lg transition-colors border-neutral-300 hover:bg-neutral-50`}
+            className={`flex-1 py-2 border rounded-lg text-primary-800 transition-colors border-neutral-300 bg-neutral-100 hover:bg-neutral-200`}
             onClick={handleGoBack}
           >
             {fromTableReservation ? "Back" : "Cancel"}
@@ -238,10 +222,9 @@ const MenuSidebar = ({
         isOpen={showConfirmation}
         onClose={handleCancel}
         onSendToKitchen={handleSendToKitchen}
-        onSendToCashier={handleSendToCashier}
         cart={cart}
         orderNumber={orderNumber}
-        orderType={orderType}
+        type={orderType}
         customerName={customerName}
         selectedTable={selectedTable}
         totalAmount={total}

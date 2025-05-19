@@ -19,6 +19,7 @@ import SettingPage from "./pages/SettingPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import TableOrderDetails from "./pages/TableOrderDetails";
 
 // Wrapper component to handle sidebar state and location changes
 const AppLayout = () => {
@@ -49,7 +50,7 @@ const AppLayout = () => {
       <div
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } w-[70%] sm:w-[50%] md:w-[40%] lg:w-56 lg:translate-x-0 fixed lg:relative z-50 h-full transition-transform duration-300 ease-in-out`}
+        } w-16 lg:translate-x-0 fixed lg:relative z-50 h-full transition-transform duration-300 ease-in-out`}
       >
         <MainSidebar />
       </div>
@@ -58,7 +59,7 @@ const AppLayout = () => {
       {!sidebarOpen && (
         <button
           onClick={toggleSidebar}
-          className="lg:hidden fixed top-[80%] left-0 z-10 bg-white h-16 p-[5px] text-lg border border-primary-200 rounded-tr-lg rounded-br-lg shadow-xl text-primary-600"
+          className="lg:hidden fixed bottom-32 left-0 z-10 bg-white h-16 p-[5px] text-lg border border-primary-200 rounded-tr-lg rounded-br-lg shadow-xl text-primary-800"
         >
           <FaArrowRight />
         </button>
@@ -89,6 +90,7 @@ const AppLayout = () => {
           <Route path="/order" element={<OrderPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/setting" element={<SettingPage />} />
+          <Route path="/table/:tableNumber" element={<TableOrderDetails />} />
         </Routes>
       </main>
     </div>

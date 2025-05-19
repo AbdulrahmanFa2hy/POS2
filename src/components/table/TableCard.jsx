@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 const TableCard = ({ table, isSelected, onSelect }) => {
+  const navigate = useNavigate();
+
   // Check if table data exists
   if (!table) return null;
 
@@ -12,24 +16,34 @@ const TableCard = ({ table, isSelected, onSelect }) => {
     return isAvailable ? "border-green-500" : "border-red-500";
   };
 
+  const handleTableClick = () => {
+    if (isAvailable) {
+      onSelect();
+    } else {
+      // Navigate to table order details using table number
+      navigate(`/table/${tableNumber}`);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <button
         className={`border-4 ${getBorderColor()} rounded-lg p-6 transition-all duration-200 
           ${
             isAvailable
-              ? "hover:shadow-card-hover"
-              : "cursor-not-allowed opacity-70"
-          } 
-          ${isSelected ? "ring-2 ring-primary-600 ring-opacity-50" : ""}
-          ${isAvailable ? "hover:border-green-600" : "hover:border-red-600"}
+              ? "hover:border-green-600 hover:shadow-card-hover"
+              : "hover:border-danger-800 hover:shadow-card-hover"
+          }
         `}
-        onClick={() => isAvailable && onSelect()}
-        disabled={!isAvailable}
-        title={isAvailable ? "Select table" : "Table not available"}
+        onClick={handleTableClick}
+        title={
+          isAvailable
+            ? "Click to order for this table"
+            : "View table order details"
+        }
       >
         <h3 className="text-xl font-medium text-center text-neutral-800">
-          T{tableNumber}
+          {tableNumber}
         </h3>
       </button>
     </div>

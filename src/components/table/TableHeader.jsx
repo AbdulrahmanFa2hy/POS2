@@ -36,8 +36,8 @@ const TableHeader = ({ seatingType, setSeatingType }) => {
           <button
             className={`py-2 px-4 rounded-lg transition-colors ${
               seatingType === "inside"
-                ? "bg-primary-600 text-white"
-                : "bg-white text-neutral-700"
+                ? "bg-primary-700 text-white"
+                : "bg-white text-primary-800 border border-primary-800"
             }`}
             onClick={() => setSeatingType("inside")}
           >
@@ -46,8 +46,8 @@ const TableHeader = ({ seatingType, setSeatingType }) => {
           <button
             className={`py-2 px-4 rounded-lg transition-colors ${
               seatingType === "outside"
-                ? "bg-primary-600 text-white"
-                : "bg-white text-neutral-700"
+                ? "bg-primary-700 text-white"
+                : "bg-white text-primary-800 border border-primary-800"
             }`}
             onClick={() => setSeatingType("outside")}
           >
@@ -57,14 +57,24 @@ const TableHeader = ({ seatingType, setSeatingType }) => {
 
         {/* Date and time display */}
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-          <div className="bg-white rounded-lg px-4 py-2 flex items-center gap-2">
-            <FaCalendarAlt className="text-neutral-500" />
+          <div className="bg-neutral-100 text-primary-800 border border-primary-800 rounded-lg px-4 py-2 flex items-center gap-2">
+            <FaCalendarAlt className="text-primary-800" />
             <span>{currentDate}</span>
           </div>
 
-          <div className="bg-white rounded-lg px-4 py-2 flex items-center gap-2">
-            <FaClock className="text-neutral-500" />
+          <div className="bg-neutral-100 text-primary-800 border border-primary-800 rounded-lg px-4 py-2 flex items-center gap-2">
+            <FaClock className="text-primary-800" />
             <span>{currentTime}</span>
+          </div>
+        </div>
+
+        {/* Status Indicators */}
+        <div className="flex justify-center gap-2 sm:gap-3">
+          <div className="inline-flex items-center px-2 sm:px-3 py-1 bg-danger-50 text-danger-600 opacity-90 text-sm font-medium rounded-full">
+            Reserved (3)
+          </div>
+          <div className="inline-flex items-center px-2 sm:px-3 py-1 bg-warning-50 text-warning-600 opacity-90 text-sm font-medium rounded-full">
+            In progress (3)
           </div>
         </div>
       </div>

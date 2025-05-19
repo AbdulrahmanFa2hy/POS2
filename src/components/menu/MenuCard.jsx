@@ -2,27 +2,23 @@ import imageUrl from "../../assets/img1.jpeg";
 
 const MenuCard = ({ item, addToCart }) => {
   return (
-    <div className="bg-white rounded-xl p-2 shadow-sm">
+    <div
+      className="bg-white rounded-lg shadow-sm hover:shadow-md cursor-pointer active:scale-95 transition-all duration-75"
+      onClick={() => addToCart(item)}
+    >
       <img
         src={imageUrl}
         alt={item.name}
-        className="w-full h-48 object-cover rounded-lg mb-2"
+        className="w-full h-20 object-cover rounded-t-md"
       />
-      <h3 className="text-lg font-semibold text-primary-600 mb-1">
-        {item.name}
-      </h3>
-      <p className="text-lg font-bold mb-1">
-        {item.price} {item.currency}
-      </p>
-      <p className="text-sm text-neutral-600 mb-1 line-clamp-3 h-[40px]">
-        {item.description}
-      </p>
-      <button
-        className="w-full py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-        onClick={() => addToCart(item)}
-      >
-        Add to Order
-      </button>
+      <div className="p-1 ">
+        <h3 className="text-sm font-medium text-primary-800 truncate">
+          {item.name}
+        </h3>
+        <p className="text-sm font-semibold text-neutral-700">
+          {item.price} {item.currency}
+        </p>
+      </div>
     </div>
   );
 };

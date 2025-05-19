@@ -32,7 +32,7 @@ const QuantityButton = ({ onClick, disabled, icon: Icon }) => (
 const NoteButton = ({ hasNote, onClick }) => (
   <button
     className={`ml-2 p-1.5 rounded-full hover:bg-neutral-50 transition-colors ${
-      hasNote ? "text-primary-600" : "text-neutral-500"
+      hasNote ? "text-primary-800" : "text-neutral-500"
     }`}
     onClick={onClick}
   >
@@ -43,13 +43,13 @@ const NoteButton = ({ hasNote, onClick }) => (
 // Item Details component
 const ItemDetails = ({ name, price, currency, note }) => (
   <div>
-    <h4 className="font-medium text-primary-600 truncate">{name}</h4>
+    <h4 className="font-medium text-primary-800 truncate">{name}</h4>
     <p className="font-medium text-sm text-neutral-600">
       {price} {currency}
     </p>
     {note && (
       <div className="mt-1.5">
-        <p className="text-xs text-primary-600 font-medium">{note}</p>
+        <p className="text-xs text-primary-800 font-medium">{note}</p>
       </div>
     )}
   </div>

@@ -1,13 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TableCard from "./TableCard";
 import TableBottom from "./TableBottom";
 
 const TableGrid = ({ tables = [], onSelectTable, seatingType }) => {
   const [selectedTable, setSelectedTable] = useState(null);
+  const navigate = useNavigate();
 
   const handleSelectTable = (tableId) => {
     setSelectedTable(tableId);
     onSelectTable(tableId);
+    // Navigate directly to menu page with selected table info
+    navigate(`/menu?table=${tableId}`);
   };
 
   // Filter tables based on seating type

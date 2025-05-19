@@ -8,7 +8,6 @@ export const fetchMeals = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(`${API_ENDPOINTS.MEALS}`);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(

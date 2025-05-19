@@ -8,7 +8,7 @@ import MenuSidebar from "../components/menu/MenuSidebar";
 import { fetchMeals } from "../store/mealSlice";
 
 const MenuPage = () => {
-  const [activeCategory, setActiveCategory] = useState("dinner");
+  const [activeCategory, setActiveCategory] = useState("pizza");
   const [orderNumber, setOrderNumber] = useState("#22222");
   const [searchQuery, setSearchQuery] = useState("");
   const [showTableDropdown, setShowTableDropdown] = useState(false);
@@ -161,7 +161,9 @@ const MenuPage = () => {
   };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart
+      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .toFixed(2);
   };
 
   const getCategoryTitle = () => {
@@ -237,7 +239,7 @@ const MenuPage = () => {
 
       <button
         onClick={toggleRightSidebar}
-        className="fixed top-[22%] right-0 z-10 bg-white h-16 p-[5px] text-lg border border-primary-200 rounded-tl-lg rounded-bl-lg shadow-xl text-primary-600"
+        className="fixed top-[22%] right-0 z-10 bg-white h-16 p-[5px] text-lg border border-primary-200 rounded-tl-lg rounded-bl-lg shadow-xl text-primary-800"
       >
         {menuSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
       </button>
@@ -247,7 +249,7 @@ const MenuPage = () => {
           ${menuSidebarOpen ? "translate-x-0" : "translate-x-full"} 
           lg:translate-x-0 
           fixed lg:relative lg:block 
-          w-80 max-w-[80vw] lg:max-w-none 
+          w-96 max-w-[80vw] lg:max-w-none 
           bg-white border-l border-neutral-200
           right-0 h-full z-50
           transition-transform duration-300 ease-in-out

@@ -1,21 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FaArrowLeft, FaTimes } from "react-icons/fa";
 import TableHeader from "../components/table/TableHeader";
 import TableGrid from "../components/table/TableGrid";
-import TableSidebar from "../components/table/TableSidebar";
 import { fetchTables, selectTable } from "../store/tableSlice";
-
-// Sample reservations data for demo
-const reservationsData = [
-  { id: 1, table: "1", name: "Ali Adel", people: 4, time: "2:30pm" },
-  { id: 2, table: "2", name: "Gamal Mohamed", people: 4, time: "2:30pm" },
-  { id: 3, table: "5", name: "Youssef Karam", people: 4, time: "2:30pm" },
-  { id: 4, table: "1", name: "Gamal Mohamed", people: 4, time: "3:30pm" },
-  { id: 5, table: "2", name: "Waleed Osama", people: 4, time: "3:30pm" },
-  { id: 6, table: "6", name: "Waleed Osama", people: 4, time: "3:30pm" },
-];
 
 const TablePage = () => {
   const [seatingType, setSeatingType] = useState("inside");
@@ -101,31 +89,6 @@ const TablePage = () => {
             )}
           </div>
         </div>
-      </div>
-
-      {/* Right sidebar toggle button */}
-      <button
-        onClick={toggleRightSidebar}
-        className="fixed top-[22%] right-0 z-10 bg-white h-16 p-[5px] text-lg border border-primary-200 rounded-tl-lg rounded-bl-lg shadow-xl text-primary-600"
-      >
-        {tableSidebarOpen ? <FaTimes /> : <FaArrowLeft />}
-      </button>
-
-      {/* Reservation list - right sidebar */}
-      <div
-        className={`
-        ${tableSidebarOpen ? "translate-x-0" : "translate-x-full"} 
-        lg:translate-x-0 
-        fixed lg:relative lg:block 
-        w-96 max-w-[85vw] lg:max-w-none 
-        border-t lg:border-t-0 lg:border-l border-neutral-200 
-        bg-white
-        overflow-y-auto h-[100vh] 
-        right-0 z-50
-        transition-transform duration-300 ease-in-out
-      `}
-      >
-        <TableSidebar reservations={reservationsData} />
       </div>
     </div>
   );
