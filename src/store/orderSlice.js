@@ -101,14 +101,14 @@ export const deleteMealFromOrder = createAsyncThunk(
     try {
       // Get the auth token from the state
       const token = getState().auth.token;
-      
+
       // Set the authorization header
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
       const response = await api.delete(`${API_ENDPOINTS.ORDER}/${orderId}`, {
-        data: { mealId }
+        data: { mealId },
       });
-      
+
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -137,26 +137,15 @@ export const addMealToOrder = createAsyncThunk(
 );
 
 // Async thunks
-export const fetchOrderByCode = createAsyncThunk(
-  "order/fetchOrderByCode",
-  async (orderCode, { rejectWithValue }) => {
-    try {
-      const response = await api.get(`${API_ENDPOINTS.ORDER}/get-by-code/${orderCode}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data || { message: "Failed to fetch order" }
-      );
-    }
-  }
-);
 
 // New thunk for fetching order by table number
 export const fetchOrderByTable = createAsyncThunk(
   "order/fetchOrderByTable",
   async (tableNumber, { rejectWithValue }) => {
     try {
-      const response = await api.get(`${API_ENDPOINTS.ORDER}/get-by-table/${tableNumber}`);
+      const response = await api.get(
+        `${API_ENDPOINTS.ORDER}/get-by-table/${tableNumber}`
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -170,9 +159,12 @@ export const changeOrderTable = createAsyncThunk(
   "order/changeOrderTable",
   async ({ orderId, newTableNumber }, { rejectWithValue }) => {
     try {
-      const response = await api.patch(`${API_ENDPOINTS.ORDER}/${orderId}/change-table`, {
-        tableNumber: newTableNumber
-      });
+      const response = await api.patch(
+        `${API_ENDPOINTS.ORDER}/${orderId}/change-table`,
+        {
+          tableNumber: newTableNumber,
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -305,19 +297,6 @@ const orderSlice = createSlice({
           state.currentOrder = updatedOrder;
         }
       })
-      // Fetch order by code
-      .addCase(fetchOrderByCode.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchOrderByCode.fulfilled, (state, action) => {
-        state.loading = false;
-        state.currentOrder = action.payload.data;
-      })
-      .addCase(fetchOrderByCode.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload?.message || "Failed to fetch order";
-      })
       // Fetch order by table
       .addCase(fetchOrderByTable.pending, (state) => {
         state.loading = true;
@@ -329,7 +308,8 @@ const orderSlice = createSlice({
       })
       .addCase(fetchOrderByTable.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Failed to fetch order by table";
+        state.error =
+          action.payload?.message || "Failed to fetch order by table";
       })
       // Change table
       .addCase(changeOrderTable.pending, (state) => {
@@ -366,7 +346,8 @@ const orderSlice = createSlice({
       })
       .addCase(deleteMealFromOrder.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Failed to delete meal from order";
+        state.error =
+          action.payload?.message || "Failed to delete meal from order";
       });
   },
 });

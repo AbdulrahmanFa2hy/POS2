@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllOrders,
   setSelectedOrder,
@@ -7,8 +7,8 @@ import {
   updateOrderDiscount,
   deleteMealFromOrder,
   addMealToOrder,
-} from '../store/orderSlice';
-import { fetchMeals } from '../store/mealSlice';
+} from "../store/orderSlice";
+import { fetchMeals } from "../store/mealSlice";
 
 export const useOrderManagement = () => {
   const dispatch = useDispatch();
@@ -76,11 +76,15 @@ export const useOrderManagement = () => {
     }
   };
 
-  const selectedOrder = orders.find((o) => o._id === selectedOrderId);
+  // Filter orders to only include takeaway orders
+  const takeawayOrders = orders.filter((o) => o.type === "takeaway");
+
+  // Use takeawayOrders for selectedOrder
+  const selectedOrder = takeawayOrders.find((o) => o._id === selectedOrderId);
 
   return {
     // State
-    orders,
+    orders: takeawayOrders,
     loading,
     error,
     meals,
@@ -107,4 +111,4 @@ export const useOrderManagement = () => {
     handleDeleteMeal,
     handleAddMeal,
   };
-}; 
+};

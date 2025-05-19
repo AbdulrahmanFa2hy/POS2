@@ -35,7 +35,7 @@ const OrderList = ({ orders, selectedOrderId, onOrderClick }) => {
                   </span>
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">
-                  Table <span className="font-bold">{order.tableNumber}</span>
+                  <span className="font-bold capitalize">{order.type}</span>
                 </p>
                 <p className="text-xs text-gray-400 mt-1">
                   {format(new Date(order.createdAt), "MMM dd, yyyy HH:mm")}

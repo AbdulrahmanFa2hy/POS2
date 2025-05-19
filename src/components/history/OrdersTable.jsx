@@ -54,7 +54,7 @@ function OrdersTable({ orders }) {
         <table className="min-w-full divide-y divide-neutral-200">
           <thead className="bg-white">
             <tr>
-              <TableHeader label="Order Id" field="orderId" />
+              <TableHeader label="Order Code" field="orderId" />
               <TableHeader label="Date" field="date" />
               <TableHeader label="Table" field="table" />
               <TableHeader label="Time" field="time" />

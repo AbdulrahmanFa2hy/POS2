@@ -6,15 +6,17 @@ import { fetchOrderByTable, deleteMealFromOrder } from "../store/orderSlice";
 import AddMealModal from "../components/orders/AddMealModal";
 import ChangeTableModal from "../components/orders/ChangeTableModal";
 import { FaTrash } from "react-icons/fa";
-import img from '../assets/img5.jpeg'
+import img from "../assets/img5.jpeg";
 const TableOrderDetails = () => {
   const { tableNumber } = useParams();
   const dispatch = useDispatch();
-  
+
   const [isAddMealModalOpen, setIsAddMealModalOpen] = useState(false);
   const [isChangeTableModalOpen, setIsChangeTableModalOpen] = useState(false);
-  
-  const { currentOrder, loading: orderLoading } = useSelector((state) => state.order);
+
+  const { currentOrder, loading: orderLoading } = useSelector(
+    (state) => state.order
+  );
   const { tables } = useSelector((state) => state.table);
   const { user } = useSelector((state) => state.auth);
 
@@ -27,13 +29,15 @@ const TableOrderDetails = () => {
 
   const handleDeleteMeal = async (mealId) => {
     if (!currentOrder?._id) return;
-    
+
     try {
-      await dispatch(deleteMealFromOrder({ 
-        orderId: currentOrder._id, 
-        mealId 
-      })).unwrap();
-      
+      await dispatch(
+        deleteMealFromOrder({
+          orderId: currentOrder._id,
+          mealId,
+        })
+      ).unwrap();
+
       dispatch(fetchOrderByTable(tableNumber));
     } catch (error) {
       console.error("Failed to delete meal:", error);
@@ -78,32 +82,51 @@ const TableOrderDetails = () => {
             <table className="w-full">
               <thead className="bg-neutral-50 border-b">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-600">Image</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-600">Name</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-600">Quantity</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-neutral-600">Price</th>
-                  <th className="px-4 py-3 text-right text-sm font-semibold text-neutral-600">Total</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-600">
+                    Image
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-600">
+                    Name
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-neutral-600">
+                    Price
+                  </th>
+                  <th className="px-4 py-3 text-center text-sm font-semibold text-neutral-600">
+                    Quantity
+                  </th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-neutral-600">
+                    Total
+                  </th>
                   {isManager && (
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-neutral-600">Actions</th>
+                    <th className="px-4 py-3 text-center text-sm font-semibold text-neutral-600">
+                      Actions
+                    </th>
                   )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
                 {currentOrder.orderItemsData?.map((meal) => {
-                  const orderItem = currentOrder.orderItems.find(item => item.mealId === meal._id);
-                  
+                  const orderItem = currentOrder.orderItems.find(
+                    (item) => item.mealId === meal._id
+                  );
+
                   return (
-                    <tr key={`meal-${meal._id}`} className="hover:bg-neutral-50 transition-colors">
+                    <tr
+                      key={`meal-${meal._id}`}
+                      className="hover:bg-neutral-50 transition-colors"
+                    >
                       <td className="px-4 py-3">
-                        <img 
-                          src={img} 
+                        <img
+                          src={img}
                           alt={meal.name}
                           className="w-12 h-12 object-cover rounded-lg"
                         />
                       </td>
                       <td className="px-4 py-3">
                         <div className="space-y-1">
-                          <div className="font-medium text-neutral-800">{meal.name}</div>
+                          <div className="font-medium text-neutral-800">
+                            {meal.name}
+                          </div>
                           {meal.ingredients && (
                             <div className="text-xs text-neutral-500 line-clamp-1">
                               {meal.ingredients}
@@ -111,9 +134,15 @@ const TableOrderDetails = () => {
                           )}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-neutral-600">${meal.price.toFixed(2)}</td>
-                      <td className="px-4 py-3 text-neutral-600 text-right">{orderItem?.quantity}</td>
-                      <td className="px-4 py-3 text-right font-medium">${(orderItem?.quantity * meal.price).toFixed(2)}</td>
+                      <td className="px-4 py-3 text-neutral-600">
+                        ${meal.price.toFixed(2)}
+                      </td>
+                      <td className="px-4 py-3 text-neutral-600 text-center">
+                        {orderItem?.quantity}
+                      </td>
+                      <td className="px-4 py-3 text-right font-medium">
+                        ${(orderItem?.quantity * meal.price).toFixed(2)}
+                      </td>
                       {isManager && (
                         <td className="px-4 py-3 text-center">
                           <button
@@ -136,28 +165,38 @@ const TableOrderDetails = () => {
           <div className="border-t bg-neutral-50 p-4 space-y-2">
             <div className="flex justify-end items-center">
               <span className="text-neutral-600 mr-4">Subtotal:</span>
-              <span className="font-medium w-32 text-right">${currentOrder.subtotalPrice?.toFixed(2) || '0.00'}</span>
+              <span className="font-medium w-32 text-right">
+                ${currentOrder.subtotalPrice?.toFixed(2) || "0.00"}
+              </span>
             </div>
             {currentOrder.discount > 0 && (
               <div className="flex justify-end items-center text-green-600">
                 <span className="mr-4">Discount:</span>
-                <span className="w-32 text-right">-${currentOrder.discount?.toFixed(2)}</span>
+                <span className="w-32 text-right">
+                  -${currentOrder.discount?.toFixed(2)}
+                </span>
               </div>
             )}
             <div className="flex justify-end items-center text-lg font-bold border-t border-neutral-200 pt-2">
               <span className="mr-4">Total:</span>
-              <span className="w-32 text-right">${currentOrder.totalPrice?.toFixed(2) || '0.00'}</span>
+              <span className="w-32 text-right">
+                ${currentOrder.totalPrice?.toFixed(2) || "0.00"}
+              </span>
             </div>
             {currentOrder.status && (
               <div className="flex justify-end items-center mt-2">
                 <span className="text-neutral-600 mr-4">Status:</span>
-                <span className="capitalize font-medium w-32 text-right">{currentOrder.status}</span>
+                <span className="capitalize font-medium w-32 text-right">
+                  {currentOrder.status}
+                </span>
               </div>
             )}
           </div>
         </div>
       ) : (
-        <p className="text-center text-neutral-600">No order found for this table.</p>
+        <p className="text-center text-neutral-600">
+          No order found for this table.
+        </p>
       )}
 
       {/* Modals */}
@@ -174,11 +213,11 @@ const TableOrderDetails = () => {
           isOpen={isChangeTableModalOpen}
           onClose={() => setIsChangeTableModalOpen(false)}
           orderId={currentOrder?._id}
-          availableTables={tables.filter(t => t.isAvailable)}
+          availableTables={tables.filter((t) => t.isAvailable)}
         />
       )}
     </div>
   );
 };
 
-export default TableOrderDetails; 
+export default TableOrderDetails;
