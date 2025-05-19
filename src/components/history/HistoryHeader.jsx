@@ -49,7 +49,7 @@ function Header({ searchTerm, onSearchChange, selectedDate, onDateChange }) {
             placeholder="Search Order Code"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="block w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all"
+            className="block w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:ring-1 text-primary-700 caret-primary-700 focus:ring-primary-700 focus:border-primary-700 focus:outline-none transition-all"
           />
         </div>
 

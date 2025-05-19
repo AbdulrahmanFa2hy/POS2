@@ -69,14 +69,14 @@ const TableHeader = ({ seatingType, setSeatingType }) => {
         </div>
 
         {/* Status Indicators */}
-        <div className="flex justify-center gap-2 sm:gap-3">
+        {/* <div className="flex justify-center gap-2 sm:gap-3">
           <div className="inline-flex items-center px-2 sm:px-3 py-1 bg-danger-50 text-danger-600 opacity-90 text-sm font-medium rounded-full">
             Reserved (3)
           </div>
           <div className="inline-flex items-center px-2 sm:px-3 py-1 bg-warning-50 text-warning-600 opacity-90 text-sm font-medium rounded-full">
             In progress (3)
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
