@@ -1,6 +1,9 @@
 function PaymentBadge({ type }) {
-  const getClassName = () => {
-    switch (type.toLowerCase()) {
+  // Support multiple payment methods separated by ' & '
+  const types = type.split(" & ");
+
+  const getClassName = (t) => {
+    switch (t.toLowerCase()) {
       case "visa":
         return "bg-success-700 text-white rounded-xl text-sm w-2/3 leading-7 m-auto text-center shadow-lg";
       case "cash":
@@ -10,7 +13,15 @@ function PaymentBadge({ type }) {
     }
   };
 
-  return <div className={getClassName()}>{type}</div>;
+  return (
+    <div className="flex flex-col gap-1">
+      {types.map((t, idx) => (
+        <div key={idx} className={getClassName(t)}>
+          {t}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default PaymentBadge;

@@ -1,4 +1,11 @@
 import pizza from "../assets/img1.jpeg";
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllPayments } from "../store/paymentSlice";
+import { FaArrowTrendUp } from "react-icons/fa6";
+import { TiShoppingCart } from "react-icons/ti";
+import { MdOutlineTableBar } from "react-icons/md";
+import { RiTakeawayLine } from "react-icons/ri";
 
 import {
   PieChart,
@@ -32,7 +39,51 @@ const incomeData = [
 
 const COLORS = ["#246FA8", "#C20A0A", "#EEAA42"];
 
-export default function Dashboard() {
+function Dashboard() {
+  const dispatch = useDispatch();
+  const { payments } = useSelector((state) => state.payment);
+
+  useEffect(() => {
+    dispatch(fetchAllPayments());
+  }, [dispatch]);
+
+  // Memoized calculations for dashboard statistics
+  const dashboardStats = useMemo(() => {
+    if (!payments.length)
+      return {
+        revenue: 0,
+        totalOrders: 0,
+        dineInOrders: 0,
+        takeAwayOrders: 0,
+      };
+
+    return payments.reduce(
+      (stats, payment) => {
+        // Add to total revenue
+        stats.revenue += payment.totalAmount || 0;
+
+        // Count total orders
+        stats.totalOrders += 1;
+
+        // Count by order type (if orderData exists)
+        const orderType = payment.orderData?.type;
+        if (orderType === "dine_in") {
+          stats.dineInOrders += 1;
+        } else if (orderType === "takeaway") {
+          stats.takeAwayOrders += 1;
+        }
+
+        return stats;
+      },
+      {
+        revenue: 0,
+        totalOrders: 0,
+        dineInOrders: 0,
+        takeAwayOrders: 0,
+      }
+    );
+  }, [payments]); // Only recalculate when payments change
+
   return (
     <div className="px-2 sm:px-4 md:px-8 py-4 w-full">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -55,20 +106,32 @@ export default function Dashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mt-2 sm:m-3">
         <div className="text-center p-2 border-2 border-[#09AE94] rounded-lg text-[#09AE94] font-bold text-xl md:text-2xl">
-          <div>Revenue</div>
-          <div>4000 AED</div>
+          Revenue
+          <div className="flex justify-center items-center gap-4">
+            <FaArrowTrendUp className="hidden sm:block " size={35} />
+            <div>{dashboardStats.revenue.toFixed(0)} AED</div>
+          </div>
         </div>
         <div className="text-center p-2 border-2 border-primary-800 rounded-lg text-primary-800 font-bold text-xl md:text-2xl">
-          <div>Orders</div>
-          <div>222</div>
+          Orders
+          <div className="flex justify-center items-center gap-4">
+            <TiShoppingCart className="hidden sm:block " size={35} />
+            <div>{dashboardStats.totalOrders}</div>
+          </div>
         </div>
         <div className="text-center p-2 border-2 border-danger-800 rounded-lg text-danger-800 font-bold text-xl md:text-2xl">
-          <div>In Dine</div>
-          <div>180</div>
+          In Dine
+          <div className="flex justify-center items-center gap-4">
+            <MdOutlineTableBar className="hidden sm:block " size={35} />
+            <div>{dashboardStats.dineInOrders}</div>
+          </div>
         </div>
         <div className="text-center p-2 border-2 border-warning-700 rounded-lg text-warning-700 font-bold text-xl md:text-2xl">
           <div>Take Away</div>
-          <div>42</div>
+          <div className="flex justify-center items-center gap-4">
+            <RiTakeawayLine className="hidden sm:block " size={35} />
+            <div>{dashboardStats.takeAwayOrders}</div>
+          </div>
         </div>
       </div>
 
@@ -198,3 +261,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;

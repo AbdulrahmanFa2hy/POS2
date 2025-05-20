@@ -3,6 +3,7 @@ import authReducer from "./authSlice";
 import tableReducer from "./tableSlice";
 import mealReducer from "./mealSlice";
 import orderReducer from "./orderSlice";
+import paymentReducer from "./paymentSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     table: tableReducer,
     meals: mealReducer,
     order: orderReducer,
+    payment: paymentReducer,
   },
 });
 

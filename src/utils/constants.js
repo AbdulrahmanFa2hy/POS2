@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   TABLES: "/api/v1/table/",
   MEALS: "/api/v1/meals",
   ORDER: "/api/v1/order",
+  PAYMENT: "/api/v1/payment/",
 };
 
 // Routes

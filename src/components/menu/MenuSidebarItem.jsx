@@ -1,21 +1,23 @@
 import { useState } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { MdOutlineSpeakerNotes } from "react-icons/md";
+import { RiRestaurant2Fill } from "react-icons/ri";
 import IngredientsPopup from "./IngredientsPopup";
-
-// Category icons mapping
-const CATEGORY_ICONS = {
-  pizza: "🍕",
-  dinner: "🍛",
-  lunch: "🥘",
-  snacks: "🥨",
-  main: "🍖",
-  appetizers: "🥪",
-  drinks: "🥤",
-  desserts: "🍰",
-  salads: "🥗",
-  default: "🍴",
-};
+import image from "../../assets/img1.jpeg";
+// Item Details component
+const ItemDetails = ({ name, price, currency, note }) => (
+  <div>
+    <h4 className="font-medium text-primary-800 truncate">{name}</h4>
+    <p className="font-medium text-sm text-neutral-600">
+      {price} {currency}
+    </p>
+    {note && (
+      <div className="mt-1.5">
+        <p className="text-xs text-primary-800 font-medium">{note}</p>
+      </div>
+    )}
+  </div>
+);
 
 // Quantity Control Button component
 const QuantityButton = ({ onClick, disabled, icon: Icon }) => (
@@ -40,23 +42,9 @@ const NoteButton = ({ hasNote, onClick }) => (
   </button>
 );
 
-// Item Details component
-const ItemDetails = ({ name, price, currency, note }) => (
-  <div>
-    <h4 className="font-medium text-primary-800 truncate">{name}</h4>
-    <p className="font-medium text-sm text-neutral-600">
-      {price} {currency}
-    </p>
-    {note && (
-      <div className="mt-1.5">
-        <p className="text-xs text-primary-800 font-medium">{note}</p>
-      </div>
-    )}
-  </div>
-);
-
 const MenuSidebarItem = ({ item, updateQuantity, updateItemNote }) => {
   const [showIngredientsPopup, setShowIngredientsPopup] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const handleQuantityChange = (change) => {
     const newQuantity = (item.quantity || 0) + change;
@@ -69,14 +57,27 @@ const MenuSidebarItem = ({ item, updateQuantity, updateItemNote }) => {
     updateItemNote(item.id || item._id, note);
   };
 
-  const categoryIcon = CATEGORY_ICONS[item.category] || CATEGORY_ICONS.default;
+  const handleImageError = () => {
+    setImageError(true);
+  };
 
   return (
     <>
-      <div className="flex items-start gap-3 bg-white rounded-lg p-3 shadow-sm border border-neutral-100">
-        {/* Category Icon */}
-        <div className="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center">
-          <span className="text-2xl">{categoryIcon}</span>
+      <div className="flex items-start gap-3 bg-white rounded-lg p-3 shadow-sm ">
+        {/* Meal Image */}
+        <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-primary-50">
+          {!imageError && image ? (
+            <img
+              src={image}
+              alt={item.name}
+              className="w-full h-full object-cover"
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="flex items-center justify-center w-full h-full">
+              <RiRestaurant2Fill className="text-2xl text-primary-300" />
+            </div>
+          )}
         </div>
 
         <div className="flex-1 min-w-0">
