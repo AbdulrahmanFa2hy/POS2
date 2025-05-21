@@ -6,14 +6,13 @@ import MenuHeader from "../components/menu/MenuHeader";
 import MenuGrid from "../components/menu/MenuGrid";
 import MenuSidebar from "../components/menu/MenuSidebar";
 import { fetchMeals } from "../store/mealSlice";
+import Loading from "../components/common/Loading";
+import ErrorMessage from "../components/common/ErrorMessage";
 
 const MenuPage = () => {
   const [activeCategory, setActiveCategory] = useState("pizza");
-  const [orderNumber, setOrderNumber] = useState("#22222");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showTableDropdown, setShowTableDropdown] = useState(false);
   const [cart, setCart] = useState([]);
-  const [customerName, setCustomerName] = useState("Guest");
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(
     window.innerWidth >= 768
   );
@@ -41,7 +40,7 @@ const MenuPage = () => {
         selectedTableObj.name || selectedTableObj.number || tableIdFromUrl;
       return `Table ${tableName}`;
     }
-    return "Table 1"; // Default if no table is specified
+    return ""; // Default if no table is specified
   });
 
   // Fetch meals when component mounts
@@ -94,8 +93,6 @@ const MenuPage = () => {
   const toggleRightSidebar = () => {
     setMenuSidebarOpen(!menuSidebarOpen);
   };
-
-  const [orderType, setOrderType] = useState("dine-in");
 
   const getFilteredMenuItems = () => {
     if (!meals) return [];
@@ -166,52 +163,14 @@ const MenuPage = () => {
       .toFixed(2);
   };
 
-  const getCategoryTitle = () => {
-    switch (activeCategory) {
-      case "pizza":
-        return "Pizza";
-      case "main":
-        return "Main Dishes";
-      case "appetizers":
-        return "Appetizers";
-      case "salads":
-        return "Salads";
-      case "desserts":
-        return "Desserts";
-      case "dinner":
-        return "Dinner";
-      case "lunch":
-        return "Lunch";
-      case "breakfast":
-        return "Breakfast";
-      case "drinks":
-        return "Beverages";
-      default:
-        return "Menu Items";
-    }
-  };
-
   const filteredMenuItems = getFilteredMenuItems();
 
-  const generateNewOrder = () => {
-    const random = Math.floor(10000 + Math.random() * 90000);
-    setOrderNumber(`#${random}`);
-  };
-
   if (loading) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <p>Loading menu items...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <p className="text-red-500">Error: {error}</p>
-      </div>
-    );
+    return <ErrorMessage message={error} />;
   }
 
   return (
@@ -229,7 +188,6 @@ const MenuPage = () => {
           setActiveCategory={setActiveCategory}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          getCategoryTitle={getCategoryTitle}
         />
 
         <div className="px-2 sm:px-4 pb-8">
@@ -259,19 +217,11 @@ const MenuPage = () => {
           cart={cart}
           selectedTable={selectedTable}
           availableTables={availableTables}
-          orderNumber={orderNumber}
-          orderType={orderType}
           updateQuantity={updateQuantity}
           updateItemNote={updateItemNote}
           setSelectedTable={setSelectedTable}
           calculateTotal={calculateTotal}
-          showTableDropdown={showTableDropdown}
-          setShowTableDropdown={setShowTableDropdown}
-          setOrderType={setOrderType}
-          generateNewOrder={generateNewOrder}
           setCart={setCart}
-          customerName={customerName}
-          setCustomerName={setCustomerName}
           fromTableReservation={!!tableIdFromUrl}
         />
       </div>

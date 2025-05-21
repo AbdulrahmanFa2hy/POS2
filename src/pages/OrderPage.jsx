@@ -7,6 +7,8 @@ import OrderList from "../components/orders/OrderList";
 import OrderDetails from "../components/orders/OrderDetails";
 import AddMealModal from "../components/orders/AddMealModal";
 import PaymentModal from "../components/orders/PaymentModal";
+import Loading from "../components/common/Loading";
+import ErrorMessage from "../components/common/ErrorMessage";
 
 const OrderPage = () => {
   const dispatch = useDispatch();
@@ -48,23 +50,15 @@ const OrderPage = () => {
   });
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <div className="text-red-600">Error: {error}</div>
-      </div>
-    );
+    return <ErrorMessage message={error} />;
   }
 
   return (
-    <div className="container mx-auto px-2 py-2">
+    <div className="container mx-auto px-2 pt-2">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         <OrderList
           orders={orders}

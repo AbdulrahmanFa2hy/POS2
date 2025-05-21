@@ -50,7 +50,7 @@ const AppLayout = () => {
       <div
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } w-16 lg:translate-x-0 fixed lg:relative z-50 h-full transition-transform duration-300 ease-in-out`}
+        } w-28 lg:w-20 lg:translate-x-0 fixed lg:relative z-50 h-full transition-transform duration-300 ease-in-out`}
       >
         <MainSidebar />
       </div>

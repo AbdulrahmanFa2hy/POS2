@@ -1,116 +1,151 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { FaChevronDown, FaUserEdit } from "react-icons/fa";
-import ConfirmOrder from "./ConfirmOrder";
+import { FaUserEdit } from "react-icons/fa";
 import MenuSidebarItem from "./MenuSidebarItem";
 import { clearSelectedTable } from "../../store/tableSlice";
+
+// Lazy load the ConfirmOrder component since it's not needed immediately
+const ConfirmOrder = lazy(() => import("./ConfirmOrder"));
 
 const MenuSidebar = ({
   cart,
   selectedTable,
-  availableTables,
-  orderNumber,
-  orderType,
   updateQuantity,
   updateItemNote,
-  setSelectedTable,
   calculateTotal,
-  showTableDropdown,
-  setShowTableDropdown,
-  setOrderType,
-  generateNewOrder,
   setCart,
-  customerName,
-  setCustomerName,
   fromTableReservation = false,
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [customerName, setCustomerName] = useState("Guest");
   const [showCustomerNameInput, setShowCustomerNameInput] = useState(false);
   const [tempCustomerName, setTempCustomerName] = useState(customerName);
-  const total = calculateTotal();
+  const [orderType, setOrderType] = useState(
+    `${fromTableReservation && selectedTable ? "dine-in" : "takeaway"}`
+  );
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleDone = () => {
+  // Memoize total calculation to prevent unnecessary recalculations
+  const total = useMemo(() => calculateTotal(), [calculateTotal]);
+
+  // Memoize the table display status
+  const tableDisplayStatus = useMemo(() => {
+    if (!selectedTable) return { text: "No table", isDisabled: true };
+    return {
+      text: selectedTable,
+      isDisabled: orderType === "takeaway",
+    };
+  }, [selectedTable, orderType]);
+
+  const handleDone = useCallback(() => {
     if (cart.length > 0) {
       setShowConfirmation(true);
     }
-  };
+  }, [cart.length]);
 
-  const handleSendToKitchen = () => {
+  const handleSendToKitchen = useCallback(() => {
     if (fromTableReservation) {
       dispatch(clearSelectedTable());
     }
 
-    // Logic to send order to kitchen
     setShowConfirmation(false);
-    generateNewOrder();
     setCart([]);
 
-    // If this was from a table reservation, navigate back to tables page
     if (fromTableReservation) {
       navigate("/table");
     }
-  };
+  }, [fromTableReservation, dispatch, setCart, navigate]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setShowConfirmation(false);
-  };
+  }, []);
 
-  const handleSaveCustomerName = () => {
+  const handleSaveCustomerName = useCallback(() => {
     setCustomerName(tempCustomerName);
     setShowCustomerNameInput(false);
-  };
+  }, [tempCustomerName, setCustomerName]);
 
-  const handleGoBack = () => {
+  const handleGoBack = useCallback(() => {
     if (fromTableReservation) {
-      // Clear selected table when navigating back
       dispatch(clearSelectedTable());
       navigate("/table");
     } else {
       setCart([]);
     }
-  };
+  }, [fromTableReservation, dispatch, navigate, setCart]);
+
+  const handleDineInClick = useCallback(() => {
+    if (!selectedTable) {
+      navigate("/table");
+    } else {
+      setOrderType("dine-in");
+    }
+  }, [selectedTable, navigate, setOrderType]);
+
+  const handleTakeawayClick = useCallback(() => {
+    setOrderType("takeaway");
+    if (fromTableReservation) {
+      dispatch(clearSelectedTable());
+    }
+  }, [setOrderType, fromTableReservation, dispatch]);
+
+  const handleCustomerNameChange = useCallback((e) => {
+    setTempCustomerName(e.target.value);
+  }, []);
+
+  // Memoize the cart items rendering
+  const cartItems = useMemo(() => {
+    if (cart.length === 0) {
+      return (
+        <div className="h-full flex flex-col justify-center items-center">
+          <p className="sm:text-xl text-neutral-500">Your order is empty</p>
+          <p className="text-sm text-neutral-400">Add items from the menu</p>
+          {fromTableReservation && (
+            <p className="mt-2 text-sm text-primary-600">{selectedTable}</p>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-1 mb-6">
+        {cart.map((item) => (
+          <MenuSidebarItem
+            key={item._id}
+            item={item}
+            updateQuantity={updateQuantity}
+            updateItemNote={updateItemNote}
+          />
+        ))}
+      </div>
+    );
+  }, [
+    cart,
+    fromTableReservation,
+    selectedTable,
+    updateQuantity,
+    updateItemNote,
+  ]);
 
   return (
     <div className="px-4 py-2 sm:py-3 h-full flex flex-col">
-      <div className="flex justify-between">
-        <div className="relative">
-          <button
-            className="font-medium flex items-center gap-1"
-            onClick={() => setShowTableDropdown(!showTableDropdown)}
-            disabled={fromTableReservation} // Disable table selection if from reservation
+      <div className="flex justify-between items-center gap-8">
+        <div>
+          <span
+            className={`font-medium ${
+              tableDisplayStatus.isDisabled
+                ? "text-neutral-400 line-through"
+                : ""
+            }`}
           >
-            {selectedTable}{" "}
-            <FaChevronDown
-              className={`text-xs ${fromTableReservation ? "hidden" : ""}`}
-            />
-          </button>
-
-          {showTableDropdown && !fromTableReservation && (
-            <div className="absolute z-10 mt-1 bg-white border border-neutral-200 rounded-lg shadow-lg w-40">
-              {availableTables.map((table) => (
-                <button
-                  key={table}
-                  className={`w-full text-left px-3 py-2 hover:bg-neutral-50 ${
-                    selectedTable === table
-                      ? "font-medium text-primary-600"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    setSelectedTable(table);
-                    setShowTableDropdown(false);
-                  }}
-                >
-                  {table}
-                </button>
-              ))}
-            </div>
-          )}
+            {tableDisplayStatus.text}
+          </span>
         </div>
         {/* Customer name input */}
-        <div className="">
+        <div>
           <button
             className="text-sm font-medium flex items-center gap-1"
             onClick={() => setShowCustomerNameInput(true)}
@@ -119,11 +154,11 @@ const MenuSidebar = ({
             <FaUserEdit className="text-sm text-primary-800" />
           </button>
           {showCustomerNameInput && (
-            <div className="absolute left-12 z-20 mt-1 flex flex-col gap-2 bg-white border border-neutral-200 rounded-lg shadow-lg p-2">
+            <div className="absolute left-6 sm:left-20 z-20 mt-1 flex flex-col gap-2 bg-white border border-neutral-200 rounded-lg shadow-lg p-2">
               <input
                 type="text"
                 value={tempCustomerName}
-                onChange={(e) => setTempCustomerName(e.target.value)}
+                onChange={handleCustomerNameChange}
                 className="border border-neutral-300 rounded-lg px-2 py-2 text-sm focus:outline-primary-800"
                 placeholder="Customer name"
               />
@@ -136,7 +171,6 @@ const MenuSidebar = ({
             </div>
           )}
         </div>
-        <p className="text-sm text-neutral-500">{orderNumber}</p>
       </div>
 
       <div className="flex gap-3 mt-2 mb-4">
@@ -146,8 +180,7 @@ const MenuSidebar = ({
               ? "bg-danger-500 text-white"
               : "bg-white border border-primary-800 text-primary-800"
           }`}
-          onClick={() => setOrderType("dine-in")}
-          disabled={fromTableReservation} // Disable order type change if from reservation
+          onClick={handleDineInClick}
         >
           Dine-in
         </button>
@@ -157,34 +190,14 @@ const MenuSidebar = ({
               ? "bg-danger-500 text-white"
               : "bg-white border border-primary-800 text-primary-800"
           }`}
-          onClick={() => setOrderType("takeaway")}
-          disabled={fromTableReservation} // Disable order type change if from reservation
+          onClick={handleTakeawayClick}
         >
           Takeaway
         </button>
       </div>
 
       <div className="flex-1 overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
-        {cart.length > 0 ? (
-          <div className="space-y-1 mb-6">
-            {cart.map((item) => (
-              <MenuSidebarItem
-                key={item._id}
-                item={item}
-                updateQuantity={updateQuantity}
-                updateItemNote={updateItemNote}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="h-full flex flex-col justify-center items-center">
-            <p className="sm:text-xl text-neutral-500">Your order is empty</p>
-            <p className="text-sm text-neutral-400">Add items from the menu</p>
-            {fromTableReservation && (
-              <p className="mt-2 text-sm text-primary-600">{selectedTable}</p>
-            )}
-          </div>
-        )}
+        {cartItems}
       </div>
 
       <div className="mt-auto border-t border-neutral-200 pt-4">
@@ -192,7 +205,7 @@ const MenuSidebar = ({
           <div className="mb-4">
             <div className="flex justify-between">
               <span className="font-medium">Total</span>
-              <span className="font-bold">{calculateTotal()} AED</span>
+              <span className="font-bold">{total} AED</span>
             </div>
           </div>
         )}
@@ -218,17 +231,20 @@ const MenuSidebar = ({
       </div>
 
       {/* Order Confirmation Popup Component */}
-      <ConfirmOrder
-        isOpen={showConfirmation}
-        onClose={handleCancel}
-        onSendToKitchen={handleSendToKitchen}
-        cart={cart}
-        orderNumber={orderNumber}
-        type={orderType}
-        customerName={customerName}
-        selectedTable={selectedTable}
-        totalAmount={total}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        {showConfirmation && (
+          <ConfirmOrder
+            isOpen={showConfirmation}
+            onClose={handleCancel}
+            onSendToKitchen={handleSendToKitchen}
+            cart={cart}
+            type={orderType}
+            customerName={customerName}
+            selectedTable={selectedTable}
+            totalAmount={total}
+          />
+        )}
+      </Suspense>
     </div>
   );
 };

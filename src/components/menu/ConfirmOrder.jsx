@@ -12,7 +12,6 @@ const ConfirmOrder = ({
   onClose,
   onSendToKitchen,
   cart,
-  orderNumber,
   type,
   customerName,
   selectedTable,
@@ -93,7 +92,6 @@ const ConfirmOrder = ({
               <div>
                 <h2 className="text-lg font-semibold">{customerName}</h2>
                 <p className="text-xs text-neutral-500">
-                  order {orderNumber.replace("#", "")} /{" "}
                   {type === "dine-in" ? "dine in" : "takeaway"}
                 </p>
               </div>

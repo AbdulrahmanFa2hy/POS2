@@ -33,7 +33,7 @@ const OrderDetails = ({
   const total = subtotal - realDiscount;
 
   return (
-    <div className="flex flex-col h-[92vh] relative">
+    <div className="flex flex-col h-[93vh] relative">
       {/* Header Section */}
       <div className="flex flex-col lg:flex-row justify-between mb-8">
         <div className="flex items-center gap-2 px-3 py-1.5 bg-primary-50 rounded-full">

@@ -37,6 +37,31 @@ const MENU_CATEGORIES = [
   },
 ];
 
+const getCategoryTitle = (activeCategory) => {
+  switch (activeCategory) {
+    case "pizza":
+      return "Pizza";
+    case "main":
+      return "Main Dishes";
+    case "appetizers":
+      return "Appetizers";
+    case "salads":
+      return "Salads";
+    case "desserts":
+      return "Desserts";
+    case "dinner":
+      return "Dinner";
+    case "lunch":
+      return "Lunch";
+    case "breakfast":
+      return "Breakfast";
+    case "drinks":
+      return "Beverages";
+    default:
+      return "Menu Items";
+  }
+};
+
 // Category Button component
 const CategoryButton = ({ category, isActive, onClick }) => (
   <button
@@ -71,7 +96,6 @@ const MenuHeader = ({
   setActiveCategory,
   searchQuery,
   setSearchQuery,
-  getCategoryTitle,
 }) => {
   return (
     <div className="p-2 sm:p-4">

@@ -1,18 +1,8 @@
 import { useState } from "react";
 import TableHeader from "./TableHeader";
 import TableRow from "./TableRow";
-
-const LoadingState = () => (
-  <div className="flex justify-center items-center py-10">
-    <span className="text-lg text-primary-700">Loading payments...</span>
-  </div>
-);
-
-const ErrorState = ({ message }) => (
-  <div className="flex justify-center items-center py-10">
-    <span className="text-lg text-red-600">{message}</span>
-  </div>
-);
+import Loading from "../common/Loading";
+import ErrorMessage from "../common/ErrorMessage";
 
 function Table({ orders, loading, error }) {
   const [sortConfig, setSortConfig] = useState({
@@ -42,8 +32,8 @@ function Table({ orders, loading, error }) {
     });
   };
 
-  if (loading) return <LoadingState />;
-  if (error) return <ErrorState message={error} />;
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
   if (!orders?.length) {
     return (
       <div className="flex justify-center items-center py-10">

@@ -70,7 +70,7 @@ function HistoryPage() {
 
         return matchesSearch && matchesDate;
       })
-      .map(({ rawDate, ...order }) => order); // Remove the rawDate from the final output
+      .map(({ ...order }) => order);
   }, [payments, searchTerm, dateRange]);
 
   return (

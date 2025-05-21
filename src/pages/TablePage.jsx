@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import TableHeader from "../components/table/TableHeader";
 import TableGrid from "../components/table/TableGrid";
 import { fetchTables, selectTable } from "../store/tableSlice";
+import Loading from "../components/common/Loading";
+import ErrorMessage from "../components/common/ErrorMessage";
 
 const TablePage = () => {
   const [seatingType, setSeatingType] = useState("inside");
@@ -73,13 +75,9 @@ const TablePage = () => {
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden ">
           <div className="flex-1 overflow-y-auto [scrollbar-width:none] [::-webkit-scrollbar]:hidden">
             {loading ? (
-              <div className="flex justify-center items-center h-full">
-                <p>Loading tables...</p>
-              </div>
+              <Loading />
             ) : error ? (
-              <div className="flex justify-center items-center h-full">
-                <p className="text-red-500">Error: {error}</p>
-              </div>
+              <ErrorMessage message={error} />
             ) : (
               <TableGrid
                 tables={tables}

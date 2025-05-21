@@ -10,6 +10,8 @@ import { FaHistory, FaCog, FaSignOutAlt } from "react-icons/fa";
 import avatar from "../assets/avatar.png";
 
 import { logout } from "../store/authSlice";
+import Tooltib from "./common/Tooltip";
+import Tooltip from "./common/Tooltip";
 
 // Navigation links configuration
 const navigationLinks = [
@@ -58,10 +60,8 @@ const SidebarNavLink = ({ to, icon: Icon, label }) => (
        }`
     }
   >
-    <Icon className="text-2xl" />
-    <span className="absolute left-full ml-2 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap">
-      {label}
-    </span>
+    <Icon className="text-3xl lg:text-2xl" />
+    <Tooltip>{label}</Tooltip>
   </NavLink>
 );
 
@@ -81,10 +81,10 @@ const UserAvatar = ({ user }) => {
     <img
       src={avatar}
       alt={user.name}
-      className="w-8 h-8 rounded-full object-cover"
+      className="w-12 h-12 sm:w-9 sm:h-9 rounded-full object-cover"
     />
   ) : (
-    <div className="w-8 h-8 bg-[#edf4fb] rounded-full flex items-center justify-center">
+    <div className="w-12 h-12 sm:w-9 sm:h-9 bg-[#edf4fb] rounded-full flex items-center justify-center">
       <span className="text-primary-800 text-xs font-medium">
         {getInitials(user.name)}
       </span>
@@ -105,7 +105,7 @@ const MainSidebar = () => {
   if (!user) return null;
 
   return (
-    <aside className="w-16 h-dvh bg-white border-r border-neutral-200 flex flex-col items-center py-4">
+    <aside className="w-full h-dvh bg-white border-r border-neutral-200 flex flex-col items-center py-4">
       {/* Logo */}
 
       {/* Navigation */}
@@ -119,19 +119,17 @@ const MainSidebar = () => {
       <div className="w-full px-2 space-y-3">
         <div className="flex justify-center group relative">
           <UserAvatar user={user} />
-          <div className="absolute left-full ml-2 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap">
+          <Tooltip>
             <p className="font-medium">{user.name}</p>
             <p className="text-xs text-gray-300">{user.role}</p>
-          </div>
+          </Tooltip>
         </div>
         <button
           className="w-full flex items-center justify-center p-3 text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 group relative"
           onClick={handleLogout}
         >
           <FaSignOutAlt className="text-xl" />
-          <span className="absolute left-full ml-2 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap">
-            Log out
-          </span>
+          <Tooltip>Log out</Tooltip>
         </button>
       </div>
     </aside>
