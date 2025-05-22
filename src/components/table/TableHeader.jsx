@@ -56,7 +56,7 @@ const TableHeader = ({ seatingType, setSeatingType }) => {
         </div>
 
         {/* Date and time display */}
-        <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+        <div className="hidden md:flex flex-wrap items-center justify-center md:justify-start gap-2">
           <div className="bg-neutral-100 text-primary-800 border border-primary-800 rounded-lg px-4 py-2 flex items-center gap-2">
             <FaCalendarAlt className="text-primary-800" />
             <span>{currentDate}</span>
