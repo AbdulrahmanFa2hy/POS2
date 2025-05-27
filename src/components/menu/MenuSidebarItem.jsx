@@ -68,7 +68,7 @@ const MenuSidebarItem = ({ item, updateQuantity, updateItemNote }) => {
         <div className="w-16 h-16 rounded-lg overflow-hidden flex items-center justify-center bg-primary-50">
           {!imageError && image ? (
             <img
-              src={item.image.url}
+              src={image}
               alt={item.name}
               className="w-full h-full object-cover"
               onError={handleImageError}
