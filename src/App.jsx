@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Provider } from "react-redux";
+import { Toaster } from "react-hot-toast";
 import store from "./store";
 import { useState, useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -13,13 +14,12 @@ import MainSidebar from "./components/MainSidebar";
 import TablePage from "./pages/TablePage";
 import MenuPage from "./pages/MenuPage";
 import DashboardPage from "./pages/DashboardPage";
-import OrderPage from "./pages/OrderPage";
 import HistoryPage from "./pages/HistoryPage";
 import SettingPage from "./pages/SettingPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import TableOrderDetails from "./pages/TableOrderDetails";
+import CashierPage from "./pages/CashierPage";
 
 // Wrapper component to handle sidebar state and location changes
 const AppLayout = () => {
@@ -87,12 +87,37 @@ const AppLayout = () => {
               />
             }
           />
-          <Route path="/order" element={<OrderPage />} />
+          <Route path="/cashier" element={<CashierPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/setting" element={<SettingPage />} />
-          <Route path="/table/:tableNumber" element={<TableOrderDetails />} />
         </Routes>
       </main>
+
+      {/* React Hot Toast Notifications */}
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 3000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+          // Default options for specific types
+          success: {
+            duration: 3000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+        }}
+      />
     </div>
   );
 };

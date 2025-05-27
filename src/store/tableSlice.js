@@ -17,6 +17,21 @@ export const fetchTables = createAsyncThunk(
   }
 );
 
+// Async thunk for creating a new table
+export const createTable = createAsyncThunk(
+  "table/createTable",
+  async (tableData, { rejectWithValue }) => {
+    try {
+      const response = await api.post(API_ENDPOINTS.TABLES, tableData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "Failed to create table" }
+      );
+    }
+  }
+);
+
 // Initial state
 const initialState = {
   tables: [],
@@ -51,6 +66,21 @@ const tableSlice = createSlice({
       .addCase(fetchTables.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "Failed to fetch tables";
+      })
+      // Create table
+      .addCase(createTable.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createTable.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload.data) {
+          state.tables.push(action.payload.data);
+        }
+      })
+      .addCase(createTable.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to create table";
       });
   },
 });

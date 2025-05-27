@@ -31,9 +31,9 @@ const navigationLinks = [
     label: "Menu",
   },
   {
-    to: "/order",
+    to: "/cashier",
     icon: MdReceiptLong,
-    label: "Order",
+    label: "Cashier",
   },
   {
     to: "/history",

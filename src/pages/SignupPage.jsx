@@ -268,8 +268,8 @@ const SignupPage = () => {
               className="w-full p-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e62b3]"
             >
               <option value="waiter">Waiter</option>
+              <option value="cashier">Cashier</option>
               <option value="manager">Manager</option>
-              <option value="admin">Admin</option>
             </select>
           </div>
 

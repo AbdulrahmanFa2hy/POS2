@@ -29,6 +29,14 @@ const initialState = {
 const mealSlice = createSlice({
   name: "meals",
   initialState,
+  reducers: {
+    selectMeal: (state, action) => {
+      state.selectedMeal = action.payload;
+    },
+    clearMealError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMeals.pending, (state) => {

@@ -136,9 +136,7 @@ export const addMealToOrder = createAsyncThunk(
   }
 );
 
-// Async thunks
-
-// New thunk for fetching order by table number
+// Async thunks for fetching order by table number
 export const fetchOrderByTable = createAsyncThunk(
   "order/fetchOrderByTable",
   async (tableNumber, { rejectWithValue }) => {
@@ -155,6 +153,7 @@ export const fetchOrderByTable = createAsyncThunk(
   }
 );
 
+// Async thunks for change order table
 export const changeOrderTable = createAsyncThunk(
   "order/changeOrderTable",
   async ({ orderId, newTableNumber }, { rejectWithValue }) => {
@@ -329,13 +328,21 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.payload?.message || "Failed to change table";
       })
-      // Delete meal from order
-      .addCase(deleteMealFromOrder.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+      // Add meal to order
+      .addCase(addMealToOrder.fulfilled, (state, action) => {
+        // Update the current order with the new data
+        state.currentOrder = action.payload.data;
+        // Update the order in the orders array as well
+        const updatedOrder = action.payload.data;
+        state.orders = state.orders.map((order) =>
+          order._id === updatedOrder._id ? updatedOrder : order
+        );
       })
+      .addCase(addMealToOrder.rejected, (state, action) => {
+        state.error = action.payload?.message || "Failed to add meal to order";
+      })
+      // Delete meal from order
       .addCase(deleteMealFromOrder.fulfilled, (state, action) => {
-        state.loading = false;
         // Update the current order with the new data
         state.currentOrder = action.payload.data;
         // Update the order in the orders array as well
@@ -345,7 +352,6 @@ const orderSlice = createSlice({
         );
       })
       .addCase(deleteMealFromOrder.rejected, (state, action) => {
-        state.loading = false;
         state.error =
           action.payload?.message || "Failed to delete meal from order";
       });

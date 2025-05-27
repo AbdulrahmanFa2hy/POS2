@@ -20,8 +20,8 @@ const TableCard = ({ table, isSelected, onSelect }) => {
     if (isAvailable) {
       onSelect();
     } else {
-      // Navigate to table order details using table number
-      navigate(`/table/${tableNumber}`);
+      // Navigate to cashier page with table number to auto-select the order
+      navigate(`/cashier?table=${tableNumber}`);
     }
   };
 
@@ -39,7 +39,7 @@ const TableCard = ({ table, isSelected, onSelect }) => {
         title={
           isAvailable
             ? "Click to order for this table"
-            : "View table order details"
+            : "Go to cashier to process payment"
         }
       >
         <h3 className="text-xl font-medium text-center text-neutral-800">
