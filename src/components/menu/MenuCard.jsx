@@ -1,13 +1,14 @@
 import imageUrl from "../../assets/img1.jpeg";
 
 const MenuCard = ({ item, addToCart }) => {
+  console.log(item);
   return (
     <div
       className="bg-white rounded-lg shadow-sm hover:shadow-md cursor-pointer active:scale-95 transition-all duration-75"
       onClick={() => addToCart(item)}
     >
       <img
-        src={imageUrl}
+        src={item.image.url}
         alt={item.name}
         className="w-full h-20 object-cover rounded-t-md"
       />

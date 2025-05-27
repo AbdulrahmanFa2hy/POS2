@@ -9,6 +9,7 @@ function CategoryTabs({ categories, activeCategory, setActiveCategory }) {
     "main dishes": <GiHotMeal />,
     appetizers: <GiCupcake />,
     drinks: <BiDrink />,
+    dinner: <GiHotMeal />,
   };
 
   return (

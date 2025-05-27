@@ -34,6 +34,7 @@ const categories = [
   { id: "main dishes", name: "main dishes" },
   { id: "appetizers", name: "appetizers" },
   { id: "drinks", name: "drinks" },
+  { id: "dinner", name: "dinner" },
 ];
 
 const MenuHeader = ({
